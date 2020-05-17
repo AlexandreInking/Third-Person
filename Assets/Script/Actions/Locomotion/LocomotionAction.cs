@@ -1,20 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class LocomotionAction : Action
 {
     protected Animator _animator;
-    protected Transform _playerTranform;
-    protected CharacterController _playerController;
-    protected IController _playerMovementController;
+    protected Transform _characterTranform;
+    protected CharacterController _characterController;
+    protected IController _locomotionController;
     
-    public LocomotionAction(Animator animator = null, Transform playerTransform = null, 
-        CharacterController playerController = null, IController playerMovementController = null)
+    public LocomotionAction(Animator animator = null, Transform characterTransform = null, 
+        CharacterController characterController = null, IController locomotionController = null)
     {
         _animator = animator;
-        _playerTranform = playerTransform;
-        _playerController = playerController;
-        _playerMovementController = playerMovementController;
+        _characterTranform = characterTransform;
+        _characterController = characterController;
+        _locomotionController = locomotionController;
     }
 }

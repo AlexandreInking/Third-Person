@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Events;
+﻿using UnityEngine;
 
 public abstract class Character : MonoBehaviour
 {
-
-
     #region ActionInitiated
 
     public delegate void ActionInitiated(Action action);

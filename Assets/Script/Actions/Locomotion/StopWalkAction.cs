@@ -1,23 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class StopWalkAction : LocomotionAction
+﻿public class StopWalkAction : LocomotionAction
 {
-    public StopWalkAction(IController playerMovementController)
-        : base(playerMovementController: playerMovementController)
+    LocomotionController locomotionController;
+
+    public StopWalkAction(IController locomotionController)
+        : base(locomotionController: locomotionController)
     {
 
     }
 
     public override void OnInitialize()
     {
-
+        locomotionController = _locomotionController as LocomotionController;
     }
 
     public override void OnAction()
     {
-        TriggerActionInitiated(this);
-        (_playerMovementController as PlayerMovementController).walking = false;
+        locomotionController.walking = false;
     }
 }

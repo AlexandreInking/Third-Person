@@ -1,24 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CrouchAction : LocomotionAction
 {
-    public CrouchAction(Animator animator, IController playerMovementController) 
-        : base(animator : animator, playerMovementController : playerMovementController)
+    LocomotionController locomotionController;
+
+    public CrouchAction(Animator animator, IController locomotionController) 
+        : base(animator : animator, locomotionController : locomotionController)
     {
 
     }
 
     public override void OnInitialize()
     {
-        
+        locomotionController = _locomotionController as LocomotionController;
     }
 
     public override void OnAction()
     {
-        TriggerActionInitiated(this);
-        (_playerMovementController as PlayerMovementController).crouching = true;
-        _animator.SetTrigger(StaticVariables.CrouchDown);
+        locomotionController.crouching = true;
+        _animator.SetTrigger(GameConstants.crouchDownHash);
     }
 }

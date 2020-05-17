@@ -1,7 +1,4 @@
-﻿using System;
-using UnityEngine.Events;
-
-public abstract class Action
+﻿public abstract class Action
 {
     #region ActionInitiated
 
@@ -11,7 +8,7 @@ public abstract class Action
 
     public void TriggerActionInitiated(Action action)
     {
-        OnActionInitiated.Invoke(action);
+        OnActionInitiated?.Invoke(action);
     }
 
     #endregion
@@ -24,7 +21,7 @@ public abstract class Action
 
     public void TriggerActionCompleted(Action action)
     {
-        OnActionCompleted.Invoke(action);
+        OnActionCompleted?.Invoke(action);
     }
 
     #endregion

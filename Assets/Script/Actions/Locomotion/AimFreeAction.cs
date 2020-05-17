@@ -1,24 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class AimFreeAction : LocomotionAction
 {
-    public AimFreeAction(Animator animator, IController playerMovementController)
-        : base(animator: animator, playerMovementController: playerMovementController)
+    LocomotionController locomotionController;
+
+    public AimFreeAction(Animator animator, IController locomotionController)
+        : base(animator: animator, locomotionController: locomotionController)
     {
 
     }
 
     public override void OnInitialize()
     {
-
+        locomotionController = _locomotionController as LocomotionController;
     }
 
     public override void OnAction()
     {
-        TriggerActionInitiated(this);
-        (_playerMovementController as PlayerMovementController).aiming = false;
-        _animator.SetTrigger(StaticVariables.AimFree);
+        locomotionController.aiming = false;
+        _animator.SetTrigger(GameConstants.aimFreeHash);
     }
 }

@@ -1,23 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class StartSprintAction : LocomotionAction
+﻿public class StartSprintAction : LocomotionAction
 {
-    public StartSprintAction(IController playerMovementController)
-        : base(playerMovementController: playerMovementController)
+    LocomotionController locomotionController;
+
+    public StartSprintAction(IController locomotionController)
+        : base(locomotionController: locomotionController)
     {
 
     }
 
     public override void OnInitialize()
     {
-
+        locomotionController = _locomotionController as LocomotionController;
     }
 
     public override void OnAction()
     {
-        TriggerActionInitiated(this);
-        (_playerMovementController as PlayerMovementController).sprinting = true;
+        locomotionController.sprinting = true;
     }
 }

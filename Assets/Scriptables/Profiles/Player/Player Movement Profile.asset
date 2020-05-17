@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   directionSpeed: 3
   rotationSpeed: 60
-  slopeDetectionDistance: 0.15
+  slopeDetectionDistance: 0.1
   onSlopeExtraDownForce: 5
   airbornePushForce: 20
   crouchToggle: 0

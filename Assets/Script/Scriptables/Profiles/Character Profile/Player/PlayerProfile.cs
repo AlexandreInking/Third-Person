@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName =nameof(PlayerProfile), menuName = "Profile/Character/Player")]
 public class PlayerProfile : CharacterProfile
@@ -12,17 +10,13 @@ public class PlayerProfile : CharacterProfile
     [Header("Animator Damp Durations")]
 
     [Range(0, 1)]
-    [SerializeField]
-    float speedDampTime = 0.15f;
+    public float speedDampTime = 0.15f;
     [Range(0, 1)]
-    [SerializeField]
-    float directionDampTime = 0.15f;
+    public float directionDampTime = 0.15f;
     [Range(0f, 1f)]
-    [SerializeField]
-    float sprintDampTime = 0.15f;
+    public float sprintDampTime = 0.15f;
     [Range(0f, 1f)]
-    [SerializeField]
-    float floorAngleDampTime = 0.15f;
+    public float floorAngleDampTime = 0.15f;
 
     #endregion
 }

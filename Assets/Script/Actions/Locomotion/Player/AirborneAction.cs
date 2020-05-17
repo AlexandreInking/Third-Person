@@ -1,33 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class AirborneAction : LocomotionAction
 {
     Transform mainCamera;
-    PlayerMovementController playerMovementController;
-    bool sprinting;
-    Vector2 inputVector;
+    PlayerLocomotionController playerMovementController;
+    Vector3 inputVector;
+
     MovementProfile movementProfile;
 
     public AirborneAction(IController playerMovementController, CharacterController playerController)
-        : base(playerMovementController: playerMovementController, playerController : playerController)
+        : base(locomotionController: playerMovementController, characterController : playerController)
     {
     }
 
     public override void OnInitialize()
     {
         mainCamera = Camera.main.transform;
-        playerMovementController = _playerMovementController as PlayerMovementController;
-        sprinting = playerMovementController.sprinting;
-        inputVector = playerMovementController.inputVector;
+        playerMovementController = _locomotionController as PlayerLocomotionController;
 
         movementProfile = (actor.profile as PlayerProfile).movementProfile;
     }
 
     public override void OnAction()
     {
-        TriggerActionInitiated(this);
+        inputVector = playerMovementController.inputVector;
 
         playerMovementController.airborne = true;
 
@@ -36,8 +32,8 @@ public class AirborneAction : LocomotionAction
         forward.y = 0;
         right.y = 0;
 
-        _playerController.Move((right.normalized * inputVector.x) 
+        _characterController.Move((right.normalized * inputVector.x) 
             + (forward.normalized * inputVector.y) *
-            (sprinting ? 1f : 0.5f) * movementProfile.airbornePushForce * Time.deltaTime);
+            (playerMovementController.sprinting ? 1f : 0.5f) * movementProfile.airbornePushForce * Time.deltaTime);
     }
 }

@@ -1,24 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class StandAction : LocomotionAction
 {
-    public StandAction(Animator animator, IController playerMovementController)
-        : base(animator: animator, playerMovementController: playerMovementController)
+    LocomotionController locomotionController;
+
+    public StandAction(Animator animator, IController locomotionController)
+        : base(animator: animator, locomotionController: locomotionController)
     {
 
     }
 
     public override void OnInitialize()
     {
-
+        locomotionController = _locomotionController as LocomotionController;
     }
 
     public override void OnAction()
     {
-        TriggerActionInitiated(this);
-        (_playerMovementController as PlayerMovementController).crouching = false;
-        _animator.SetTrigger(StaticVariables.CrouchFree);
+        locomotionController.crouching = false;
+        _animator.SetTrigger(GameConstants.crouchFreeHash);
     }
 }
