@@ -1,33 +1,29 @@
 ﻿using UnityEngine;
 
 //Detect If Airborne and Trigger Actions
-public class OnAirAction : LocomotionAction
+public class OnAirAction : Action
 {
-    PlayerLocomotionController playerMovementController;
-
-    public OnAirAction(IController playerMovementController, CharacterController playerController)
-        : base(locomotionController: playerMovementController, characterController: playerController)
-    {
-
-    }
+    LocomotionController locomotionController;
+    CharacterController characterController;
 
     public override void OnInitialize()
     {
-        playerMovementController = _locomotionController as PlayerLocomotionController;
+        locomotionController = actionPack.actionController as LocomotionController;
+        characterController = actor.GetComponent<CharacterController>();
     }
 
     public override void OnAction()
     {
-        if (playerMovementController.airborne)
+        if (locomotionController.airborne)
         {
-            if (_characterController.isGrounded)
-                actionSet.TakeAction<GroundedAction>();
+            if (characterController.isGrounded)
+                actionPack.TakeAction<GroundedAction>();
         }
 
         else
         {
-            if (!_characterController.isGrounded)
-                actionSet.TakeAction<AirborneAction>();
+            if (!characterController.isGrounded)
+                actionPack.TakeAction<AirborneAction>();
         }
 
         TriggerActionCompleted(this);

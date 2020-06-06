@@ -1,23 +1,19 @@
 ﻿using UnityEngine;
 
-public class StandAction : LocomotionAction
+public class StandAction : Action
 {
     LocomotionController locomotionController;
-
-    public StandAction(Animator animator, IController locomotionController)
-        : base(animator: animator, locomotionController: locomotionController)
-    {
-
-    }
+    Animator animator;
 
     public override void OnInitialize()
     {
-        locomotionController = _locomotionController as LocomotionController;
+        locomotionController = actionPack.actionController as LocomotionController;
+        animator = actor.GetComponent<Animator>();
     }
 
     public override void OnAction()
     {
         locomotionController.crouching = false;
-        _animator.SetTrigger(GameConstants.crouchFreeHash);
+        animator.SetTrigger(GameConstants.crouchFreeHash);
     }
 }

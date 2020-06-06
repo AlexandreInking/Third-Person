@@ -1,29 +1,24 @@
 ﻿using UnityEngine;
 
-public class AirborneAction : LocomotionAction
+public class AirborneAction : Action
 {
     Transform mainCamera;
     PlayerLocomotionController playerMovementController;
-    Vector3 inputVector;
+    CharacterController characterController;
 
     MovementProfile movementProfile;
-
-    public AirborneAction(IController playerMovementController, CharacterController playerController)
-        : base(locomotionController: playerMovementController, characterController : playerController)
-    {
-    }
 
     public override void OnInitialize()
     {
         mainCamera = Camera.main.transform;
-        playerMovementController = _locomotionController as PlayerLocomotionController;
-
-        movementProfile = (actor.profile as PlayerProfile).movementProfile;
+        playerMovementController = actionPack.actionController as PlayerLocomotionController;
+        characterController = actor.GetComponent<CharacterController>();
+        movementProfile = (actor.profile as MotileProfile).movementProfile;
     }
 
     public override void OnAction()
     {
-        inputVector = playerMovementController.inputVector;
+        Vector3 inputVector = playerMovementController.inputVector;
 
         playerMovementController.airborne = true;
 
@@ -32,7 +27,7 @@ public class AirborneAction : LocomotionAction
         forward.y = 0;
         right.y = 0;
 
-        _characterController.Move((right.normalized * inputVector.x) 
+        characterController.Move((right.normalized * inputVector.x) 
             + (forward.normalized * inputVector.y) *
             (playerMovementController.sprinting ? 1f : 0.5f) * movementProfile.airbornePushForce * Time.deltaTime);
     }

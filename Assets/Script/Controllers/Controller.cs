@@ -3,15 +3,17 @@ using UnityEngine;
 
 public abstract class Controller : MonoBehaviour, IController
 {
-    public ActionSet actionSet;
-    public ControllerSet controllerSet;
-    public Character controllerCharacter;
+    public ActionPack actionPack;
+    public ControllerPack controllerPack;
+    public Character controlledCharacter;
     
-    protected void InitializeActionSet<A>() where A : ActionSet
+    protected void InitializeActionPack<A>() where A : ActionPack, new()
     {
-        actionSet = (A) Activator.CreateInstance(typeof(A));
-        actionSet.actionController = this;
-        actionSet.actor = controllerSet.controlledCharacter;
-        actionSet.OnInitialize();
+        actionPack = new A();
+        actionPack.actionController = this;
+        actionPack.actor = controllerPack.controlledCharacter;
+        actionPack.OnInitialize();
     }
+
+    public abstract void OnInitialize();
 }

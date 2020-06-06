@@ -1,27 +1,21 @@
 ﻿using UnityEngine;
 
 //Gets fall Displacement/Velocity
-public class GetDropAction : LocomotionAction
+public class GetDropAction : Action
 {
-    PlayerLocomotionController playerMovementController;
-
-    public GetDropAction(IController playerMovementController)
-        : base(locomotionController: playerMovementController)
-    {
-
-    }
+    LocomotionController locomotionController;
 
     public override void OnInitialize()
     {
-        playerMovementController = _locomotionController as PlayerLocomotionController;
+        locomotionController = actionPack.actionController as LocomotionController;
     }
 
     public override void OnAction()
     {
-        if (!playerMovementController.airborne)
-            playerMovementController.fallVelocity.y = 0f;
+        if (!locomotionController.airborne)
+            locomotionController.fallVelocity.y = 0f;
 
         else
-            playerMovementController.fallVelocity.y += Physics.gravity.y * Time.deltaTime;
+            locomotionController.fallVelocity.y += Physics.gravity.y * Time.deltaTime;
     }
 }

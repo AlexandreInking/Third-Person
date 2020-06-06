@@ -1,16 +1,10 @@
-﻿public class StopSprintAction : LocomotionAction
+﻿public class StopSprintAction : Action
 {
     LocomotionController locomotionController;
 
-    public StopSprintAction(IController locomotionController)
-        : base(locomotionController: locomotionController)
-    {
-
-    }
-
     public override void OnInitialize()
     {
-        locomotionController = _locomotionController as LocomotionController;
+        locomotionController = actionPack.actionController as LocomotionController;
     }
 
     public override void OnAction()

@@ -1,30 +1,26 @@
 ﻿using UnityEngine;
 
-public class GetAngleAction : LocomotionAction
+public class GetAngleAction : Action
 {
     PlayerLocomotionController playerMovementController;
     Vector3 stickDirection;
     Vector2 inputVector;
     Transform mainCamera;
+    Transform characterTransform;
     MovementProfile movementProfile;
-
-    public GetAngleAction(IController playerMovementController, Transform playerTransform)
-        : base(locomotionController: playerMovementController, characterTransform : playerTransform)
-    {
-
-    }
 
     public override void OnInitialize()
     {
         mainCamera = Camera.main.transform;
-        playerMovementController = _locomotionController as PlayerLocomotionController;
+        playerMovementController = actionPack.actionController as PlayerLocomotionController;
+        characterTransform = actor.GetComponent<Transform>();
         movementProfile = (actor.profile as PlayerProfile).movementProfile;
     }
 
     public override void OnAction()
     {
         inputVector = playerMovementController.inputVector;
-        stickDirection = playerMovementController.aiming ? Vector3.forward : new Vector3(inputVector.x, 0, inputVector.y);
+        stickDirection = playerMovementController.strafing ? Vector3.forward : new Vector3(inputVector.x, 0, inputVector.y);
 
         CalculateAngle();
 
@@ -41,8 +37,8 @@ public class GetAngleAction : LocomotionAction
 
         //Input to Worldspace coordinates
         Vector3 moveDirection = referentialShift * stickDirection;
-        Vector3 axisSign = Vector3.Cross(moveDirection, _characterTranform.forward);
+        Vector3 axisSign = Vector3.Cross(moveDirection, characterTransform.forward);
 
-        playerMovementController.angle = Vector3.Angle(_characterTranform.forward, moveDirection) * (axisSign.y >= 0 ? -1f : 1f);
+        playerMovementController.angle = Vector3.Angle(characterTransform.forward, moveDirection) * (axisSign.y >= 0 ? -1f : 1f);
     }
 }

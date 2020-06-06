@@ -15,3 +15,9 @@ MonoBehaviour:
   title: 
   description: 
   movementProfile: {fileID: 11400000, guid: 6aa52d663d4f93545a080b9b6e972eab, type: 2}
+  inventory: {fileID: 11400000, guid: 929239a26cdbf9947b4dafac2e7de055, type: 2}
+  combatProfile: {fileID: 11400000, guid: f3675b383bf0bb946801d3cfbd19ea38, type: 2}
+  speedDampTime: 0.15
+  directionDampTime: 0.15
+  sprintDampTime: 0.15
+  floorAngleDampTime: 0.15

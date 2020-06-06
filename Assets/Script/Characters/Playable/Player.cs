@@ -2,6 +2,6 @@
 {
     private void Awake()
     {
-        InitializeControllerSet<PlayerControllerSet>();
+        InitializeControllerPack<PlayerControllerPack>();
     }
 }

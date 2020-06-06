@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName =nameof(PlayerProfile), menuName = "Profile/Character/Player")]
-public class PlayerProfile : CharacterProfile
+[CreateAssetMenu(fileName =nameof(PlayerProfile), menuName = "SO/Profile/Character/Player")]
+public class PlayerProfile : CombatantProfile
 {
-    public MovementProfile movementProfile;
-
     #region AnimatorDampTime
 
     [Header("Animator Damp Durations")]

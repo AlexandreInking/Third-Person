@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 
-//Sets Player Animator's Movement Parameters
-public class SetAnimatorAction : LocomotionAction
+/// <summary>
+/// Sets Player Animator's Movement Parameters
+/// </summary>
+public class SetAnimatorAction : Action
 {
     #region AnimatorHashes
 
@@ -17,14 +19,10 @@ public class SetAnimatorAction : LocomotionAction
     public Vector2 inputVector;
     public Vector2 rawInputVector;
 
-    PlayerLocomotionController playerMovementController;
+    PlayerLocomotionController locomotionController;
+    Animator animator;
 
     PlayerProfile playerProfile;
-
-    public SetAnimatorAction(Animator animator, IController playerMovementController)
-        : base(animator: animator, locomotionController: playerMovementController)
-    {
-    }
 
     public override void OnInitialize()
     {
@@ -39,15 +37,16 @@ public class SetAnimatorAction : LocomotionAction
 
         #endregion
 
-        playerMovementController = _locomotionController as PlayerLocomotionController;
+        locomotionController = actionPack.actionController as PlayerLocomotionController;
+        animator = actor.GetComponent<Animator>();
 
         playerProfile = actor.profile as PlayerProfile;
     }
 
     public override void OnAction()
     {
-        inputVector = playerMovementController.inputVector;
-        rawInputVector = playerMovementController.rawInputVector;
+        inputVector = locomotionController.inputVector;
+        rawInputVector = locomotionController.rawInputVector;
 
         SetAnimatorParameters();
 
@@ -56,35 +55,35 @@ public class SetAnimatorAction : LocomotionAction
 
     void SetAnimatorParameters()
     {
-        _animator.SetFloat(directionHash, playerMovementController.direction, playerProfile.directionDampTime, Time.deltaTime);
-        _animator.SetFloat(angleHash, playerMovementController.angle, playerProfile.speedDampTime, Time.deltaTime);
-        _animator.SetFloat(GameConstants.fallDistanceHash, playerMovementController.fallVelocity.y, 0f, Time.deltaTime);
-        _animator.SetFloat(GameConstants.floorAngleHash, playerMovementController.floorAngle, playerProfile.floorAngleDampTime, Time.deltaTime);
+        animator.SetFloat(directionHash, locomotionController.direction, playerProfile.directionDampTime, Time.deltaTime);
+        animator.SetFloat(angleHash, locomotionController.angle, playerProfile.speedDampTime, Time.deltaTime);
+        animator.SetFloat(GameConstants.fallDistanceHash, locomotionController.fallVelocity.y, 0f, Time.deltaTime);
+        animator.SetFloat(GameConstants.floorAngleHash, locomotionController.floorAngle, playerProfile.floorAngleDampTime, Time.deltaTime);
 
-        _animator.SetFloat(GameConstants.speedHash, 
+        animator.SetFloat(GameConstants.speedHash, 
             inputVector.normalized.magnitude *
-            (playerMovementController.walking ? 0.5f : 1f),
+            (locomotionController.walking ? 0.5f : 1f),
             playerProfile.speedDampTime, Time.deltaTime);
 
-        _animator.SetFloat(rawSpeedHash,
+        animator.SetFloat(rawSpeedHash,
             rawInputVector.normalized.magnitude);
 
-        _animator.SetBool(GameConstants.isGroundedHash, !playerMovementController.airborne);
-        _animator.SetBool(GameConstants.aimingHash, playerMovementController.aiming);
-        _animator.SetBool(GameConstants.crouchingHash, playerMovementController.crouching);
+        animator.SetBool(GameConstants.isGroundedHash, !locomotionController.airborne);
+        animator.SetBool(GameConstants.strafingHash, locomotionController.strafing);
+        animator.SetBool(GameConstants.crouchingHash, locomotionController.crouching);
 
-        if (playerMovementController.aiming)
+        if (locomotionController.strafing)
         {
-            _animator.SetFloat(GameConstants.rightHash, inputVector.normalized.x, playerProfile.speedDampTime, Time.deltaTime);
-            _animator.SetFloat(GameConstants.forwardHash, inputVector.normalized.y, playerProfile.speedDampTime, Time.deltaTime);
+            animator.SetFloat(GameConstants.rightHash, inputVector.normalized.x, playerProfile.speedDampTime, Time.deltaTime);
+            animator.SetFloat(GameConstants.forwardHash, inputVector.normalized.y, playerProfile.speedDampTime, Time.deltaTime);
         }
 
-        _animator.SetFloat(GameConstants.sprintFactorHash,
-            playerMovementController.sprinting ? 1 : 0.5f, playerProfile.sprintDampTime,
+        animator.SetFloat(GameConstants.sprintFactorHash,
+            locomotionController.sprinting ? 1 : 0.5f, playerProfile.sprintDampTime,
             Time.deltaTime);
 
-        _animator.SetFloat(groundedFootHash,
-            !playerMovementController.airborne ?
-            _animator.GetFloat(leftFootUpHash) - _animator.GetFloat(rightFootUpHash) : _animator.GetFloat(groundedFootHash));
+        animator.SetFloat(groundedFootHash,
+            !locomotionController.airborne ?
+            animator.GetFloat(leftFootUpHash) - animator.GetFloat(rightFootUpHash) : animator.GetFloat(groundedFootHash));
     }
 }

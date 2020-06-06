@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "Movement Profile", menuName = "Profile/Character/Movement")]
+[CreateAssetMenu(fileName = "Movement Profile", menuName = "SO/Profile/Character/Movement")]
 public class MovementProfile : ScriptableObject
 {
     [Header("Direction and Rotation")]

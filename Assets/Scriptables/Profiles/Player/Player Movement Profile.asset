@@ -18,6 +18,6 @@ MonoBehaviour:
   onSlopeExtraDownForce: 5
   airbornePushForce: 20
   crouchToggle: 0
-  aimToggle: 0
+  aimToggle: 1
   sprintToggle: 0
   walkToggle: 0

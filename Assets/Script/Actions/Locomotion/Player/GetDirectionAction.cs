@@ -1,18 +1,12 @@
-﻿public class GetDirectionAction : LocomotionAction
+﻿public class GetDirectionAction : Action
 {
     PlayerLocomotionController playerMovementController;
     MovementProfile movementProfile;
 
-    public GetDirectionAction(IController playerMovementController)
-        : base(locomotionController: playerMovementController)
-    {
-
-    }
-
     public override void OnInitialize()
     {
-        playerMovementController = _locomotionController as PlayerLocomotionController;
-        movementProfile = (actor.profile as PlayerProfile).movementProfile;
+        playerMovementController = actionPack.actionController as PlayerLocomotionController;
+        movementProfile = (actor.profile as MotileProfile).movementProfile;
     }
 
     public override void OnAction()

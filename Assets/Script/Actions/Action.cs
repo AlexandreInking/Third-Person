@@ -1,4 +1,4 @@
-﻿public abstract class Action
+﻿public abstract class Action : IAction
 {
     #region ActionInitiated
 
@@ -26,10 +26,9 @@
 
     #endregion
 
-    public ActionSet actionSet;
+    public ActionPack actionPack;
     public Character actor;
 
     public abstract void OnInitialize();
-
     public abstract void OnAction();
 }

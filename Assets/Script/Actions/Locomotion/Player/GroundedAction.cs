@@ -1,16 +1,10 @@
-﻿public class GroundedAction : LocomotionAction
+﻿public class GroundedAction : Action
 {
-    PlayerLocomotionController playerMovementController;
-
-    public GroundedAction(IController playerMovementController)
-        : base(locomotionController: playerMovementController)
-    {
-
-    }
+    LocomotionController playerMovementController;
 
     public override void OnInitialize()
     {
-        playerMovementController = _locomotionController as PlayerLocomotionController;
+        playerMovementController = actionPack.actionController as LocomotionController;
     }
 
     public override void OnAction()

@@ -1,23 +1,19 @@
 ﻿using UnityEngine;
 
-public class CrouchAction : LocomotionAction
+public class CrouchAction : Action
 {
     LocomotionController locomotionController;
-
-    public CrouchAction(Animator animator, IController locomotionController) 
-        : base(animator : animator, locomotionController : locomotionController)
-    {
-
-    }
+    Animator animator;
 
     public override void OnInitialize()
     {
-        locomotionController = _locomotionController as LocomotionController;
+        locomotionController = actionPack.actionController as LocomotionController;
+        animator = actor.GetComponent<Animator>();
     }
 
     public override void OnAction()
     {
         locomotionController.crouching = true;
-        _animator.SetTrigger(GameConstants.crouchDownHash);
+        animator.SetTrigger(GameConstants.crouchDownHash);
     }
 }

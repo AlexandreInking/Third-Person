@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class Character : MonoBehaviour
+public abstract class Character : MonoBehaviour, ICharacter
 {
     #region ActionInitiated
 
@@ -28,16 +28,54 @@ public abstract class Character : MonoBehaviour
 
     #endregion
 
+    #region OnAnimatorIk
 
-    public ControllerSet controllerSet;
+    public delegate void AnimatorIk();
+
+    public event AnimatorIk OnAnimatorIk;
+
+    public void TriggerOnAnimatorIk()
+    {
+        OnAnimatorIk?.Invoke();
+    }
+
+    #endregion
+
+
+    #region AnimationEvent
+
+    public delegate void AnimationEvent(string eventTag);
+
+    public event AnimationEvent OnAnimationEvent;
+
+    public void TriggerAnimationEvent(string eventTag)
+    {
+        OnAnimationEvent?.Invoke(eventTag);
+    }
+
+    #endregion
+
+
+    public ControllerPack controllerPack;
     public CharacterProfile profile;
 
-    protected void InitializeControllerSet<T>() where T : ControllerSet
+    protected void InitializeControllerPack<T>() where T : ControllerPack
     {
-        GameObject obj = new GameObject(nameof(controllerSet), typeof(T));
+        GameObject obj = new GameObject(nameof(controllerPack), typeof(T));
         obj.transform.SetParent(transform);
 
-        controllerSet = obj.GetComponent<T>();
-        controllerSet.controlledCharacter = this;
+        controllerPack = obj.GetComponent<T>();
+        controllerPack.controlledCharacter = this;
+        controllerPack.OnInitialize();
+    }
+
+    private void OnAnimatorIK(int layerIndex)
+    {
+        TriggerOnAnimatorIk();
+    }
+
+    public void PromptAnimationEvent(string eventTag)
+    {
+        TriggerAnimationEvent(eventTag);
     }
 }

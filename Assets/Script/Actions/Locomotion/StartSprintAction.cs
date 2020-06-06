@@ -1,20 +1,15 @@
-﻿public class StartSprintAction : LocomotionAction
+﻿public class StartSprintAction : Action
 {
     LocomotionController locomotionController;
 
-    public StartSprintAction(IController locomotionController)
-        : base(locomotionController: locomotionController)
-    {
-
-    }
-
     public override void OnInitialize()
     {
-        locomotionController = _locomotionController as LocomotionController;
+        locomotionController = actionPack.actionController as LocomotionController;
     }
 
     public override void OnAction()
     {
+        TriggerActionInitiated(this);
         locomotionController.sprinting = true;
     }
 }

@@ -1,21 +1,21 @@
 ﻿using UnityEngine;
 
-//Applies down force when on slope
-public class OnSlopeForceAction : LocomotionAction
+/// <summary>
+/// Applies down force when on slope
+/// </summary>
+public class OnSlopeForceAction : Action
 {
     PlayerLocomotionController playerMovementController;
+    CharacterController characterController;
+    Transform characterTransform;
     Vector2 inputVector;
     MovementProfile movementProfile;
 
-    public OnSlopeForceAction(IController playerMovementController, Transform playerTransform, CharacterController playerController)
-        : base(locomotionController: playerMovementController, characterTransform : playerTransform, characterController: playerController)
-    {
-
-    }
-
     public override void OnInitialize()
     {
-        playerMovementController = _locomotionController as PlayerLocomotionController;
+        playerMovementController = actionPack.actionController as PlayerLocomotionController;
+        characterTransform = actor.GetComponent<Transform>();
+        characterController = actor.GetComponent<CharacterController>();
         movementProfile = (actor.profile as PlayerProfile).movementProfile;
     }
 
@@ -31,8 +31,8 @@ public class OnSlopeForceAction : LocomotionAction
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(_characterTranform.position, Vector3.down, out hit, movementProfile.slopeDetectionDistance))
-            playerMovementController.floorAngle = Vector3.Angle(hit.normal, _characterTranform.up);
+        if (Physics.Raycast(characterTransform.position, Vector3.down, out hit, movementProfile.slopeDetectionDistance))
+            playerMovementController.floorAngle = Vector3.Angle(hit.normal, characterTransform.up);
         else
             playerMovementController.floorAngle = 0f;
     }
@@ -40,6 +40,6 @@ public class OnSlopeForceAction : LocomotionAction
     void ApplyOnSlopeDownForce()
     {
         if (playerMovementController.floorAngle > 0 && !inputVector.Equals(Vector2.zero))
-            _characterController.Move(Vector3.down * playerMovementController.floorAngle * movementProfile.onSlopeExtraDownForce * Time.deltaTime);
+            characterController.Move(Vector3.down * playerMovementController.floorAngle * movementProfile.onSlopeExtraDownForce * Time.deltaTime);
     }
 }
