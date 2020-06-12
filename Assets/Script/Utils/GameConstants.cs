@@ -77,6 +77,7 @@ public class GameConstants
     public static readonly int reloadHash = Animator.StringToHash("Reload");
     public static readonly int aimingHash = Animator.StringToHash("Aiming");
     public static readonly int landedHash = Animator.StringToHash("Landed");
+    public static readonly int airborneHash = Animator.StringToHash("Airborne");
 
     #endregion
 

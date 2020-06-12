@@ -4,6 +4,8 @@ public class AirborneAction : Action
 {
     Transform mainCamera;
 
+    Animator animator;
+
     PlayerLocomotionController playerMovementController;
 
     CharacterController characterController;
@@ -13,6 +15,8 @@ public class AirborneAction : Action
     public override void OnInitialize()
     {
         mainCamera = Camera.main.transform;
+
+        animator = actor.GetComponent<Animator>();
 
         playerMovementController = actionPack.actionController as PlayerLocomotionController;
 
@@ -27,6 +31,9 @@ public class AirborneAction : Action
 
         playerMovementController.airborne = true;
 
+        animator.SetTrigger(GameConstants.airborneHash);
+
+        //Push Force Logic
         Vector3 forward = mainCamera.forward;
 
         Vector3 right = mainCamera.right;
