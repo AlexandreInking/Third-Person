@@ -18,27 +18,82 @@ public class BowAdapter : RangedWeaponAdapter
 
         rootNockPosition = nock.localPosition;
 
+        Animator animator = actor.GetComponent<Animator>();
+
+        CombatController combatController = actor.controllerPack.GetController<CombatController>();
+
+        AnimationController animationController = actor.controllerPack.GetController<AnimationController>();
+
+        CombatActionPack actionPack = combatController.actionPack as CombatActionPack;
+
+        (inventory as PlayerInventory).OnQuickSlotEquipped += (entry => 
+        {
+            actionPack.GetAction<ReloadAction>().Reload();
+        });
+
         actor.OnAnimationEvent += (eventTag => 
         {
             switch (eventTag)
             {
                 case GameConstants.AE_Nock:
+
                     Attach();
+
                     break;
+
                 case GameConstants.AE_Fire:
+
+                    Dettach();
+
+                    if (animator.GetBool(GameConstants.aimingHash))
+                    {
+                        actionPack.TakeAction<ReloadAction>();
+                    }
+
+                    else
+                    {
+                        actionPack.GetAction<ReloadAction>().Reload();
+                    }
+
+                    break;
+
+                default:
+                    break;
+            }
+        });
+
+        actionPack.AddActionInitiatedListener<AimDownAction>(action => 
+        {
+            RangedWeapon bow = (inventory as PlayerInventory).ActiveEntry.Value as RangedWeapon;
+
+            if (bow.clipCount > 0)
+            {
+                //Dettach Arrow ; Put Arrow Back in Quiver
+                bow.magazine += bow.clipCount;
+                bow.clipCount = 0;
+            }
+
+            actionPack.TakeAction<ReloadAction>();
+        });
+
+        actionPack.AddActionInitiatedListener<AimFreeAction>(action => 
+        {
+            Dettach();
+
+            actionPack.GetAction<ReloadAction>().Reload();
+        });
+
+        animationController.OnStateInitialized += (state =>
+        {
+            switch (state)
+            {
+                case GameConstants.AS_Idle:
                     Dettach();
                     break;
                 default:
                     break;
             }
         });
-
-
-        actor.controllerPack.GetController<CombatController>().actionPack
-            .AddActionInitiatedListener<AimFreeAction>(action => 
-            {
-                Dettach();
-            });
     }
 
     /// <summary>
@@ -47,6 +102,7 @@ public class BowAdapter : RangedWeaponAdapter
     public void Attach()
     {
         nock.SetParent((inventory as PlayerInventory).rightHand);
+
         nock.localPosition = Vector3.zero;
     }
 
@@ -56,6 +112,7 @@ public class BowAdapter : RangedWeaponAdapter
     public void Dettach()
     {
         nock.SetParent(transform);
+
         nock.localPosition = rootNockPosition;
     }
 }

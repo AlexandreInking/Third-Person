@@ -14,16 +14,12 @@ public class PlayerCombatController : CombatController
 
     private void Start()
     {
-        controlledCharacter.OnAnimatorIk += delegate 
-        {
-            if (aiming)
-                actionPack.TakeAction<LookAtAction>();
-        };
+        AnimationController animationController = controllerPack.GetController<AnimationController>();
 
         controllerPack.GetController<LocomotionController>()
             .actionPack.AddActionInitiatedListener<StartSprintAction>(action =>
             {
-                if (aiming)
+                if (controlledCharacter.GetComponent<Animator>().GetBool(GameConstants.aimingHash))
                     actionPack.TakeAction<AimFreeAction>();
             });
 
@@ -43,7 +39,10 @@ public class PlayerCombatController : CombatController
             actionPack.TakeAction<ToggleAimAction>();
         }
 
-        actionPack.TakeAction<AttackAction>();
+        if (Input.GetButtonDown(GameConstants.Fire1))
+        {
+            actionPack.TakeAction<AttackAction>();
+        }
     }
 
     private void OnGUI()

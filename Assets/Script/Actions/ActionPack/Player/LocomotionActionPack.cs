@@ -2,6 +2,7 @@
 
 public class LocomotionActionPack : ActionPack
 {
+    //TODO: Get Drop Action For Strafing
     public override void OnInitialize()
     {
         #region Crouch | Stand
@@ -11,7 +12,6 @@ public class LocomotionActionPack : ActionPack
         InitializeAction<StandAction>();
 
         #endregion
-
 
         #region STRAFE
 

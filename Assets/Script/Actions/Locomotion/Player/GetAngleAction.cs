@@ -1,25 +1,38 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Calculate Turn Angle
+/// </summary>
 public class GetAngleAction : Action
 {
     PlayerLocomotionController playerMovementController;
+
     Vector3 stickDirection;
+
     Vector2 inputVector;
+
     Transform mainCamera;
+
     Transform characterTransform;
+
     MovementProfile movementProfile;
 
     public override void OnInitialize()
     {
         mainCamera = Camera.main.transform;
+
         playerMovementController = actionPack.actionController as PlayerLocomotionController;
+
         characterTransform = actor.GetComponent<Transform>();
+
         movementProfile = (actor.profile as PlayerProfile).movementProfile;
     }
 
     public override void OnAction()
     {
+
         inputVector = playerMovementController.inputVector;
+
         stickDirection = playerMovementController.strafing ? Vector3.forward : new Vector3(inputVector.x, 0, inputVector.y);
 
         CalculateAngle();
@@ -37,6 +50,7 @@ public class GetAngleAction : Action
 
         //Input to Worldspace coordinates
         Vector3 moveDirection = referentialShift * stickDirection;
+
         Vector3 axisSign = Vector3.Cross(moveDirection, characterTransform.forward);
 
         playerMovementController.angle = Vector3.Angle(characterTransform.forward, moveDirection) * (axisSign.y >= 0 ? -1f : 1f);

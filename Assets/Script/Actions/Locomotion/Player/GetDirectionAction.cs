@@ -1,11 +1,16 @@
-﻿public class GetDirectionAction : Action
+﻿/// <summary>
+/// Caculates Look Direction
+/// </summary>
+public class GetDirectionAction : Action
 {
     PlayerLocomotionController playerMovementController;
+
     MovementProfile movementProfile;
 
     public override void OnInitialize()
     {
         playerMovementController = actionPack.actionController as PlayerLocomotionController;
+
         movementProfile = (actor.profile as MotileProfile).movementProfile;
     }
 

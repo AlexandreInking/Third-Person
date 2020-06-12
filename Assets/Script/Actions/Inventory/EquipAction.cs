@@ -4,18 +4,11 @@ using UnityEngine;
 
 public class EquipAction : Action
 {
-    PlayerInventoryController inventoryController;
-
     PlayerInventory inventory;
 
     Animator animator;
 
     int equipHash;
-
-    public override void OnAction()
-    {
-
-    }
 
     public override void OnInitialize()
     {
@@ -25,8 +18,6 @@ public class EquipAction : Action
 
         inventory = (actor.profile as CombatantProfile).inventory as PlayerInventory;
 
-        inventoryController = actionPack.actionController as PlayerInventoryController;
-
         #region On Equip
 
         inventory.OnQuickSlotEquipped += (item =>
@@ -35,6 +26,11 @@ public class EquipAction : Action
         });
 
         #endregion
+
+    }
+
+    public override void OnAction()
+    {
 
     }
 }

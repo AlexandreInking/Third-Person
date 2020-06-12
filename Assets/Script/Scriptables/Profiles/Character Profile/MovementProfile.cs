@@ -26,8 +26,6 @@ public class MovementProfile : ScriptableObject
     [SerializeField]
     public bool crouchToggle;
     [SerializeField]
-    public bool aimToggle;
-    [SerializeField]
     public bool sprintToggle;
     [SerializeField]
     public bool walkToggle;

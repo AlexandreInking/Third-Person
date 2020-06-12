@@ -11,7 +11,9 @@ public abstract class ControllerPack : MonoBehaviour, IControllerPack
         Controller controller = gameObject.AddComponent<C>();
 
         controller.controllerPack = this;
+
         controller.controlledCharacter = controlledCharacter;
+
         controllers.Add(controller);
 
         controller.OnInitialize();

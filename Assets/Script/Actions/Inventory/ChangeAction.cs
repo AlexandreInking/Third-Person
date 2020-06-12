@@ -8,9 +8,12 @@ using UnityEngine;
 /// </summary>
 public class ChangeAction : Action
 {
-    PlayerInventoryController inventoryController;
-
     PlayerInventory inventory;
+
+    public override void OnInitialize()
+    {
+        inventory = (actor.profile as CombatantProfile).inventory as PlayerInventory;
+    }
 
     public override void OnAction()
     {
@@ -19,17 +22,11 @@ public class ChangeAction : Action
         GameConstants.PlayerSlots.ForEach(slot =>
         {
             if (Input.GetButtonDown(slot))
+            {
                 inventory.ChangeItem(slotPointer);
+            }
 
             slotPointer++;
         });
-    }
-
-    public override void OnInitialize()
-    {
-        inventory = (actor.profile as CombatantProfile).inventory as PlayerInventory;
-
-        inventoryController = actionPack.actionController as PlayerInventoryController;
-
     }
 }

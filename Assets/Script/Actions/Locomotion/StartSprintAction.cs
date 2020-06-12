@@ -10,6 +10,7 @@
     public override void OnAction()
     {
         TriggerActionInitiated(this);
+
         locomotionController.sprinting = true;
     }
 }

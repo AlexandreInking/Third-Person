@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using static Action;
 
 public abstract class ActionPack : IActionPack
 {
     public Controller actionController;
+
     public List<Action> actions = new List<Action>();
+
     public Character actor;
 
     protected void InitializeAction<A>() where A : Action, new()
@@ -17,6 +18,7 @@ public abstract class ActionPack : IActionPack
         action.actor = actionController.controllerPack.controlledCharacter;
 
         action.OnActionInitiated += ActionInitiated;
+
         action.OnActionCompleted += ActionCompleted;
 
         actions.Add(action);
@@ -48,7 +50,14 @@ public abstract class ActionPack : IActionPack
 
     public T GetAction<T>() where T : Action
     {
-        return (T)actions.Find(x => x is T);
+        T action = (T)actions.Find(x => x is T);
+
+        if (action == null)
+        {
+            UnityEngine.Debug.LogError($"Couldn't Find Action {nameof(T)}");
+        }
+
+        return action;
     }
 
     public void TakeAction<T>() where T : Action

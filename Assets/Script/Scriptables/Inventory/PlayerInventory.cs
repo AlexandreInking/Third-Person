@@ -134,8 +134,7 @@ public class PlayerInventory : Inventory
 
         HotBar[GetHotBarEntry(slotIndex).Key] = null;
 
-        //TODO: More Implementation For Non Ranged
-        //Destroy Instance of Item
+        //TODO: Destroy Instance of Item
     }
 
     /// <summary>

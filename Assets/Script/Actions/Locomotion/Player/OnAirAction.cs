@@ -4,11 +4,13 @@
 public class OnAirAction : Action
 {
     LocomotionController locomotionController;
+
     CharacterController characterController;
 
     public override void OnInitialize()
     {
         locomotionController = actionPack.actionController as LocomotionController;
+
         characterController = actor.GetComponent<CharacterController>();
     }
 

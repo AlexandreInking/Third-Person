@@ -3,10 +3,15 @@
 public class GetRotationAction : Action
 {
     PlayerLocomotionController playerMovementController;
+
     Transform characterTransform;
-    Animator animator;
+
+    AnimationController animationController;
+
     MovementProfile movementProfile;
+
     Transform mainCamera;
+
     Vector2 inputVector;
 
     public override void OnInitialize()
@@ -14,8 +19,10 @@ public class GetRotationAction : Action
         mainCamera = Camera.main.transform;
 
         playerMovementController = actionPack.actionController as PlayerLocomotionController;
+
         characterTransform = actor.GetComponent<Transform>();
-        animator = actor.GetComponent<Animator>();
+
+        animationController = actor.controllerPack.GetController<AnimationController>();
 
         movementProfile = (actor.profile as MotileProfile).movementProfile;
     }
@@ -38,16 +45,16 @@ public class GetRotationAction : Action
         {
             rotationSpeedMultiplier += 4f;
 
-            if (animator.GetCurrentAnimatorStateInfo(GameConstants.BaseLayer).shortNameHash.Equals(GameConstants.locomotionShortHash))
+            if (animationController.state[GameConstants.BaseLayer] == GameConstants.AS_Locomotion)
                 characterTransform.rotation = Quaternion.RotateTowards(characterTransform.rotation,
                     Quaternion.LookRotation(cameraDirection.normalized),
                     movementProfile.rotationSpeed * rotationSpeedMultiplier * Time.deltaTime);
 
-            //This Should Be Moved to a Combat Action (or not?)
-            else if (animator.GetCurrentAnimatorStateInfo(GameConstants.RangedLayer).shortNameHash.Equals(GameConstants.aimingShortHash))
+            else
                 characterTransform.rotation = Quaternion.RotateTowards(characterTransform.rotation,
-                     Quaternion.LookRotation(cameraDirection.normalized), 
-                     movementProfile.rotationSpeed * (rotationSpeedMultiplier / 1.5f) * Time.deltaTime);
+                         Quaternion.LookRotation(cameraDirection.normalized),
+                         movementProfile.rotationSpeed * (rotationSpeedMultiplier / 1.5f) * Time.deltaTime);
+
         }
 
         else
@@ -60,7 +67,7 @@ public class GetRotationAction : Action
             forward.y = 0;
             right.y = 0;
 
-            if (animator.GetCurrentAnimatorStateInfo(GameConstants.BaseLayer).shortNameHash.Equals(GameConstants.locomotionShortHash))
+            if (animationController.state[GameConstants.BaseLayer] == GameConstants.AS_Locomotion)
                 characterTransform.rotation = Quaternion.RotateTowards(characterTransform.rotation,
                     Quaternion.LookRotation((right.normalized * inputVector.x) + (forward.normalized * inputVector.y)),
                     movementProfile.rotationSpeed * rotationSpeedMultiplier * Time.deltaTime);

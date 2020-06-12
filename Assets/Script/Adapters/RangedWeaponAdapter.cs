@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//TODO : Move clip count to Adapter
 public class RangedWeaponAdapter : ItemAdapter
 {
     public override void Equip()

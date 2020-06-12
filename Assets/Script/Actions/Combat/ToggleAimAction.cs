@@ -1,16 +1,23 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ToggleAimAction : Action
 {
-    CombatController combatController;
     CombatProfile combatProfile;
+
+    CombatController combatController;
+
+    Animator animator;
 
     public override void OnInitialize()
     {
-        combatController = actionPack.actionController as CombatController;
         combatProfile = (actor.profile as CombatantProfile).combatProfile;
+
+        combatController = actionPack.actionController as CombatController;
+
+        animator = actor.GetComponent<Animator>();
     }
 
     public override void OnAction()
@@ -28,20 +35,26 @@ public class ToggleAimAction : Action
             if (toggle)
             {
                 if (Input.GetButtonDown(button))
+                {
                     actionPack.TakeAction<CompletedAction>();
+                }
             }
 
             else
             {
                 if (Input.GetButtonUp(button))
+                {
                     actionPack.TakeAction<CompletedAction>();
+                }
             }
         }
 
         else
         {
             if (Input.GetButtonDown(button))
+            {
                 actionPack.TakeAction<InitiatedAction>();
+            }
         }
     }
 }

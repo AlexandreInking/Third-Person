@@ -6,9 +6,13 @@ public class InventoryActionPack : ActionPack
     {
         InitializeAction<InitContainersAction>();
 
+        #region Equip | UnEquip
+
         InitializeAction<EquipAction>();
 
         InitializeAction<UnEquipAction>();
+
+        #endregion
 
         InitializeAction<ChangeAction>();
     }

@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 
-//Gets fall Displacement/Velocity
+/// <summary>
+/// Gets fall Displacement/Velocity
+/// </summary>
 public class GetDropAction : Action
 {
     LocomotionController locomotionController;

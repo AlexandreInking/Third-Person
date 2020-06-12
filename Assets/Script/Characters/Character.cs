@@ -34,7 +34,7 @@ public abstract class Character : MonoBehaviour, ICharacter
 
     public event AnimatorIk OnAnimatorIk;
 
-    public void TriggerOnAnimatorIk()
+    void TriggerOnAnimatorIk()
     {
         OnAnimatorIk?.Invoke();
     }
@@ -57,6 +57,7 @@ public abstract class Character : MonoBehaviour, ICharacter
 
 
     public ControllerPack controllerPack;
+
     public CharacterProfile profile;
 
     protected void InitializeControllerPack<T>() where T : ControllerPack
@@ -65,7 +66,9 @@ public abstract class Character : MonoBehaviour, ICharacter
         obj.transform.SetParent(transform);
 
         controllerPack = obj.GetComponent<T>();
+
         controllerPack.controlledCharacter = this;
+
         controllerPack.OnInitialize();
     }
 
