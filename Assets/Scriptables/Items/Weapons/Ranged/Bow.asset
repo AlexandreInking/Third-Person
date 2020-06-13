@@ -17,6 +17,5 @@ MonoBehaviour:
   flavor: {fileID: 11400000, guid: ad47498050d4a9e4e953745d077850dd, type: 2}
   fireRate: 1
   clipSize: 1
-  clipCount: 1
-  magazine: 94
+  magazine: 41
   cartridge: {fileID: 0}

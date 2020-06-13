@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -54,7 +55,8 @@ public class PlayerInventory : Inventory
 
     #endregion
 
-    public Item testBow;
+    public Bow testBow;
+    public ArrowMagazine testMag;
 
     #region Containers
 
@@ -112,6 +114,7 @@ public class PlayerInventory : Inventory
         };
 
         Library.Add(bowSlot, testBow);
+        AddMagazine(testMag);
     }
 
     /// <summary>
@@ -262,5 +265,50 @@ public class PlayerInventory : Inventory
             Debug.LogError($"Hot Bar Slot {slotIndex} Not Initialized : Out Of Bounds");
 
         return keyPair;
+    }
+
+    public KeyValuePair<Slot, Item> GetMagazine<T>() where T : Slug
+    {
+        KeyValuePair<Slot, Item> keyPair = Library
+            .FirstOrDefault(pair => pair.Value is Magazine<T>);
+
+        return keyPair;
+    }
+
+    public void LoadMagazine<T>(int rounds) where T : Slug
+    {
+        KeyValuePair<Slot, Item> magazine = GetMagazine<T>();
+
+        (Library[magazine.Key] as Magazine<T>).count += rounds;
+    }
+
+    public void UnLoadMagazine<T>(int rounds) where T : Slug
+    {
+        KeyValuePair<Slot, Item> magazine = GetMagazine<T>();
+
+        (Library[magazine.Key] as Magazine<T>).count -= rounds;
+    }
+
+    public void AddMagazine<T>(Magazine<T> magazine) where T : Slug
+    {
+        //Check if Magazine Exists
+        KeyValuePair<Slot, Item> old = GetMagazine<T>();
+
+        if (old.Value == null)
+        {
+            //Needs Revisit
+            Slot slot = new Slot
+            {
+                index = UnityEngine.Random.Range(10, 20),
+            };
+
+            Library.Add(slot, magazine);
+        }
+
+        else
+        {
+            //Add to Existing
+            (Library[old.Key] as Magazine<T>).count += magazine.count;
+        }
     }
 }

@@ -16,7 +16,4 @@ public class RangedWeapon : Weapon
     public int clipSize = 1;
     [Tooltip("Total Bullets Outside Clip")]
     public int magazine = 50;
-    [Space]
-    [Tooltip("Kind of Ammo it takes")]
-    public Slug cartridge;
 }
