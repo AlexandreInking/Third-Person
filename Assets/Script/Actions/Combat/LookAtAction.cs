@@ -25,7 +25,7 @@ public class LookAtAction : Action
 
         inventory.OnQuickSlotEquipped += (entry =>
         {
-            if (entry.Value is RangedWeapon)
+            if (entry.Value.Item is RangedWeapon)
             {
                 actor.OnAnimatorIk += Look;
             }
@@ -33,7 +33,7 @@ public class LookAtAction : Action
 
         inventory.OnQuickSlotUnEquipped += (entry =>
         {
-            if (entry.Value is RangedWeapon)
+            if (entry.Value.Item is RangedWeapon)
             {
                 actor.OnAnimatorIk -= Look;
             }

@@ -41,7 +41,7 @@ class PlayerLocomotionController : LocomotionController
         controllerPack.GetController<PlayerInventoryController>().inventory
             .OnQuickSlotEquipped += (ActiveEntry => 
             {
-                if (ActiveEntry.Value is RangedWeapon)
+                if (ActiveEntry.Value.Item is RangedWeapon)
                     actionPack.TakeAction<StrafeAction>();
 
             });

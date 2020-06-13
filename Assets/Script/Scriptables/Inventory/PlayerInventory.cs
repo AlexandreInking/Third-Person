@@ -8,11 +8,11 @@ public class PlayerInventory : Inventory
 {
     #region QuickSlotEquipped
 
-    public delegate void QuickSlotEquipped(KeyValuePair<Slot, Item> EquippedEntry);
+    public delegate void QuickSlotEquipped(KeyValuePair<Slot, Volume> EquippedEntry);
 
     public event QuickSlotEquipped OnQuickSlotEquipped;
 
-    public void TriggerQuickSlotEquipped(KeyValuePair<Slot, Item> EquippedEntry)
+    public void TriggerQuickSlotEquipped(KeyValuePair<Slot, Volume> EquippedEntry)
     {
         OnQuickSlotEquipped?.Invoke(EquippedEntry);
     }
@@ -21,17 +21,16 @@ public class PlayerInventory : Inventory
 
     #region QuickSlotUnEquipped
 
-    public delegate void QuickSlotUnEquipped(KeyValuePair<Slot, Item> UnEquippedEntry);
+    public delegate void QuickSlotUnEquipped(KeyValuePair<Slot, Volume> UnEquippedEntry);
 
     public event QuickSlotUnEquipped OnQuickSlotUnEquipped;
 
-    public void TriggerQuickSlotUnEquipped(KeyValuePair<Slot, Item> UnEquippedEntry)
+    public void TriggerQuickSlotUnEquipped(KeyValuePair<Slot, Volume> UnEquippedEntry)
     {
         OnQuickSlotUnEquipped?.Invoke(UnEquippedEntry);
     }
 
     #endregion
-
 
     #region ItemCloned
 
@@ -39,31 +38,37 @@ public class PlayerInventory : Inventory
 
     public event ItemCloned OnItemCloned;
 
-    public void TriggerItemCloned(GameObject obj)
+    public void TriggerItemCloned(int slotIndex)
     {
 
-        obj.TryGetComponent(out Adapter adapter);
+        HotBar[GetHotBarEntry(slotIndex).Key].Instance
+            .TryGetComponent(out Adapter adapter);
 
         if (adapter)
+        {
+            HotBar[GetHotBarEntry(slotIndex).Key].Adapter = adapter;
+
             OnItemCloned?.Invoke(adapter);
+        }
     }
 
     #endregion
-
 
     public Item testBow;
 
     #region Containers
 
     [HideInInspector] public Transform rangedWeapon;
+
     [HideInInspector] public Transform leftHand;
+
     [HideInInspector] public Transform rightHand;
 
     #endregion
 
-    public KeyValuePair<Slot, Item> ActiveEntry { get; private set; }
+    public KeyValuePair<Slot, Volume> ActiveEntry { get; private set; }
 
-    public Dictionary<Slot, Item> HotBar = new Dictionary<Slot, Item>();
+    public Dictionary<Slot, Volume> HotBar = new Dictionary<Slot, Volume>();
 
     private void OnEnable()
     {
@@ -76,7 +81,12 @@ public class PlayerInventory : Inventory
                 isEquipped = false
             };
 
-            HotBar.Add(slot, null);
+            HotBar.Add(slot, new Volume
+            {
+                Item = null,
+                Instance = null,
+                Adapter = null
+            });
         }
 
         //Init Library With {i} Slots
@@ -111,11 +121,11 @@ public class PlayerInventory : Inventory
     /// <param name="slotIndex">Index Of Slot to be Occupied</param>
     public void HoldQuickSlot(KeyValuePair<Slot, Item> inventoryEntry, int slotIndex)
     {
-        HotBar[GetHotBarEntry(slotIndex).Key] = inventoryEntry.Value;
+        HotBar[GetHotBarEntry(slotIndex).Key].Item = inventoryEntry.Value;
 
-        GameObject obj = Instantiate(inventoryEntry.Value.itemPrefab);
+        HotBar[GetHotBarEntry(slotIndex).Key].Instance = Instantiate(inventoryEntry.Value.itemPrefab);
 
-        TriggerItemCloned(obj);
+        TriggerItemCloned(slotIndex);
     }
 
     /// <summary>
@@ -124,17 +134,17 @@ public class PlayerInventory : Inventory
     /// <param name="slotIndex">Index Of Slot to be Released</param>
     public void ReleaseQuickSlot(int slotIndex)
     {
-        KeyValuePair<Slot, Item> keyPair = GetHotBarEntry(slotIndex);
+        KeyValuePair<Slot, Volume> keyPair = GetHotBarEntry(slotIndex);
 
-        if (keyPair.Value == null)
+        if (keyPair.Value.Item == null)
         {
             Debug.LogError($"Slot {slotIndex} Already Released");
+
             return;
         }
 
-        HotBar[GetHotBarEntry(slotIndex).Key] = null;
-
-        //TODO: Destroy Instance of Item
+        //TODO: Test Release Quick Slot
+        HotBar[GetHotBarEntry(slotIndex).Key].ClearVoulme();
     }
 
     /// <summary>
@@ -147,6 +157,7 @@ public class PlayerInventory : Inventory
         if (GetHotBarEntry(slotIndex).Key.isEquipped)
         {
             Debug.LogError($"Hot Slot {slotIndex} : Already Equipped");
+
             return;
         }
 
@@ -158,9 +169,10 @@ public class PlayerInventory : Inventory
 
         HotBar.Add(ActiveEntry.Key, ActiveEntry.Value);
 
-        if (GetHotBarEntry(slotIndex).Value == null)
+        if (GetHotBarEntry(slotIndex).Value.Item == null)
         {
             Debug.LogError($"Can't Equip Slot {slotIndex} : Empty Slot");
+
             return;
         }
 
@@ -188,7 +200,7 @@ public class PlayerInventory : Inventory
 
         HotBar.Add(ActiveEntry.Key, ActiveEntry.Value);
 
-        if (GetHotBarEntry(slotIndex).Value == null)
+        if (GetHotBarEntry(slotIndex).Value.Item == null)
         {
             Debug.LogError($"Can't UnEquip Slot {slotIndex} : Empty Slot");
             return;
@@ -242,9 +254,9 @@ public class PlayerInventory : Inventory
     /// </summary>
     /// <param name="slotIndex">Index of Slot Entry</param>
     /// <returns></returns>
-    public KeyValuePair<Slot, Item> GetHotBarEntry(int slotIndex)
+    public KeyValuePair<Slot, Volume> GetHotBarEntry(int slotIndex)
     {
-        KeyValuePair<Slot, Item> keyPair = HotBar.FirstOrDefault(pair => pair.Key.index.Equals(slotIndex));
+        KeyValuePair<Slot, Volume> keyPair = HotBar.FirstOrDefault(pair => pair.Key.index.Equals(slotIndex));
 
         if (keyPair.Equals(null))
             Debug.LogError($"Hot Bar Slot {slotIndex} Not Initialized : Out Of Bounds");

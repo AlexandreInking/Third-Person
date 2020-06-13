@@ -13,7 +13,9 @@ public abstract class ItemAdapter : Adapter
     [Header("Animation")]
     [SerializeField] new Animation animation;
 
-    protected Inventory inventory;
+    protected PlayerInventory inventory;
+
+    protected bool isEquipped = false;
 
     public override void Initialize()
     {
@@ -21,26 +23,24 @@ public abstract class ItemAdapter : Adapter
         animation.AddClip(EquipClip, EquipClip.name);
         animation.AddClip(UnEquipClip, UnEquipClip.name);
 
-        inventory = (actor.profile as CombatantProfile).inventory;
+        inventory = (actor.profile as CombatantProfile).inventory as PlayerInventory;
 
-        //Add Listeners
-        actor.OnAnimationEvent += (eventTag => 
+        inventory.OnQuickSlotEquipped += (entry =>
         {
-            switch (eventTag)
+            if (entry.Value.Adapter == this)
             {
-                case GameConstants.AE_Equip:
-                    Equip();
-                    break;
-                case GameConstants.AE_UnEquip:
-                    UnEquip();
-                    break;
-                default:
-                    break;
+                isEquipped = true;
+
+                return;
             }
+
+            isEquipped = false;
         });
 
-        //Default State
-        UnEquip();
+        inventory.OnQuickSlotUnEquipped += (entry =>
+        {
+            isEquipped = false;
+        });
     }
 
     public virtual void Equip()

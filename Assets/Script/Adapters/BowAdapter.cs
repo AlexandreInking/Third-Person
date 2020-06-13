@@ -18,21 +18,29 @@ public class BowAdapter : RangedWeaponAdapter
 
         rootNockPosition = nock.localPosition;
 
-        Animator animator = actor.GetComponent<Animator>();
-
         CombatController combatController = actor.controllerPack.GetController<CombatController>();
 
         AnimationController animationController = actor.controllerPack.GetController<AnimationController>();
 
         CombatActionPack actionPack = combatController.actionPack as CombatActionPack;
 
-        (inventory as PlayerInventory).OnQuickSlotEquipped += (entry => 
+        inventory.OnQuickSlotEquipped += (entry => 
         {
+            if (!isEquipped)
+            {
+                return;
+            }
+
             actionPack.GetAction<ReloadAction>().Reload();
         });
 
         actor.OnAnimationEvent += (eventTag => 
         {
+            if (!isEquipped)
+            {
+                return;
+            }
+
             switch (eventTag)
             {
                 case GameConstants.AE_Nock:
@@ -45,7 +53,7 @@ public class BowAdapter : RangedWeaponAdapter
 
                     Dettach();
 
-                    if (animator.GetBool(GameConstants.aimingHash))
+                    if (combatController.aiming)
                     {
                         actionPack.TakeAction<ReloadAction>();
                     }
@@ -64,13 +72,20 @@ public class BowAdapter : RangedWeaponAdapter
 
         actionPack.AddActionInitiatedListener<AimDownAction>(action => 
         {
-            RangedWeapon bow = (inventory as PlayerInventory).ActiveEntry.Value as RangedWeapon;
+            if (!isEquipped)
+            {
+                return;
+            }
 
-            if (bow.clipCount > 0)
+            RangedWeapon bow = inventory.ActiveEntry.Value.Item as RangedWeapon;
+
+            RangedWeaponAdapter adapter = inventory.ActiveEntry.Value.Adapter as RangedWeaponAdapter;
+
+            if (adapter.clipCount > 0)
             {
                 //Dettach Arrow ; Put Arrow Back in Quiver
-                bow.magazine += bow.clipCount;
-                bow.clipCount = 0;
+                bow.magazine += adapter.clipCount;
+                adapter.clipCount = 0;
             }
 
             actionPack.TakeAction<ReloadAction>();
@@ -78,6 +93,11 @@ public class BowAdapter : RangedWeaponAdapter
 
         actionPack.AddActionInitiatedListener<AimFreeAction>(action => 
         {
+            if (!isEquipped)
+            {
+                return;
+            }
+
             Dettach();
 
             actionPack.GetAction<ReloadAction>().Reload();
@@ -85,6 +105,11 @@ public class BowAdapter : RangedWeaponAdapter
 
         animationController.OnStateInitialized += (state =>
         {
+            if (!isEquipped)
+            {
+                return;
+            }
+
             switch (state)
             {
                 case GameConstants.AS_Idle:

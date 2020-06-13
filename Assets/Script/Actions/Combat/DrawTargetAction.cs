@@ -20,9 +20,9 @@ public class DrawTargetAction : Action
 
         inventory.OnQuickSlotEquipped += (entry => 
         {
-            if (entry.Value is RangedWeapon)
+            if (entry.Value.Item is RangedWeapon)
             {
-                RangedWeaponFlavor flavor = entry.Value.flavor as RangedWeaponFlavor;
+                RangedWeaponFlavor flavor = entry.Value.Item.flavor as RangedWeaponFlavor;
 
                 crossHair = flavor.crosshairTexture;
 

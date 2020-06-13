@@ -6,16 +6,23 @@
 public class OnSlopeForceAction : Action
 {
     PlayerLocomotionController playerMovementController;
+
     CharacterController characterController;
+
     Transform characterTransform;
+
     Vector2 inputVector;
+
     MovementProfile movementProfile;
 
     public override void OnInitialize()
     {
         playerMovementController = actionPack.actionController as PlayerLocomotionController;
+
         characterTransform = actor.GetComponent<Transform>();
+
         characterController = actor.GetComponent<CharacterController>();
+
         movementProfile = (actor.profile as PlayerProfile).movementProfile;
     }
 
@@ -24,6 +31,7 @@ public class OnSlopeForceAction : Action
         inputVector = playerMovementController.inputVector;
 
         CalculateFloorAngle();
+
         ApplyOnSlopeDownForce();
     }
 

@@ -15,5 +15,7 @@ public class InventoryActionPack : ActionPack
         #endregion
 
         InitializeAction<ChangeAction>();
+
+        InitializeAction<ItemAdapterAction>();
     }
 }

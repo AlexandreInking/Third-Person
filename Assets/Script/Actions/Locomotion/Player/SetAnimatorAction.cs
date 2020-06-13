@@ -17,9 +17,11 @@ public class SetAnimatorAction : Action
     #endregion
 
     public Vector2 inputVector;
+
     public Vector2 rawInputVector;
 
     PlayerLocomotionController locomotionController;
+
     Animator animator;
 
     PlayerProfile playerProfile;
@@ -38,6 +40,7 @@ public class SetAnimatorAction : Action
         #endregion
 
         locomotionController = actionPack.actionController as PlayerLocomotionController;
+
         animator = actor.GetComponent<Animator>();
 
         playerProfile = actor.profile as PlayerProfile;
@@ -57,6 +60,7 @@ public class SetAnimatorAction : Action
     {
         animator.SetFloat(directionHash, locomotionController.direction, playerProfile.directionDampTime, Time.deltaTime);
         animator.SetFloat(angleHash, locomotionController.angle, playerProfile.speedDampTime, Time.deltaTime);
+
         animator.SetFloat(GameConstants.fallDistanceHash, locomotionController.fallVelocity.y, 0f, Time.deltaTime);
         animator.SetFloat(GameConstants.floorAngleHash, locomotionController.floorAngle, playerProfile.floorAngleDampTime, Time.deltaTime);
 
@@ -68,7 +72,6 @@ public class SetAnimatorAction : Action
         animator.SetFloat(rawSpeedHash,
             rawInputVector.normalized.magnitude);
 
-        animator.SetBool(GameConstants.isGroundedHash, !locomotionController.airborne);
         animator.SetBool(GameConstants.strafingHash, locomotionController.strafing);
         animator.SetBool(GameConstants.crouchingHash, locomotionController.crouching);
 

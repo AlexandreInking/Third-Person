@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class ReloadAction : Action
 {
@@ -33,9 +34,11 @@ public class ReloadAction : Action
 
     public override void OnAction()
     {
-        RangedWeapon weapon = inventory.ActiveEntry.Value as RangedWeapon;
+        RangedWeapon weapon = inventory.ActiveEntry.Value.Item as RangedWeapon;
 
-        if (weapon.clipCount == weapon.clipSize)
+        RangedWeaponAdapter adapter = inventory.ActiveEntry.Value.Adapter as RangedWeaponAdapter;
+
+        if (adapter.clipCount == weapon.clipSize)
         {
             //Full Clip
             Debug.LogError("Full Clip");
@@ -58,21 +61,23 @@ public class ReloadAction : Action
 
     public void Reload()
     {
-        RangedWeapon weapon = inventory.ActiveEntry.Value as RangedWeapon;
+        RangedWeapon weapon = inventory.ActiveEntry.Value.Item as RangedWeapon;
+
+        RangedWeaponAdapter adapter = inventory.ActiveEntry.Value.Adapter as RangedWeaponAdapter;
 
         //Remaining Clip Slots
-        int open = weapon.clipSize - weapon.clipCount;
+        int open = weapon.clipSize - adapter.clipCount;
 
         if (weapon.magazine > open)
         {
-            weapon.clipCount = weapon.clipSize;
+            adapter.clipCount = weapon.clipSize;
 
             weapon.magazine -= open;
         }
 
         else
         {
-            weapon.clipCount += weapon.magazine;
+            adapter.clipCount += weapon.magazine;
 
             weapon.magazine = 0;
         }

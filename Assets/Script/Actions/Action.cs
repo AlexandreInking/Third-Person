@@ -27,6 +27,7 @@
     #endregion
 
     public ActionPack actionPack;
+
     public Character actor;
 
     public abstract void OnInitialize();

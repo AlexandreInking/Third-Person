@@ -18,6 +18,11 @@ public class PlayerInventoryController : InventoryController
         inventory.OnItemCloned += (adapter =>
         {
             adapter.Actor = controlledCharacter;
+
+            if (adapter is ItemAdapter)
+            {
+                (adapter as ItemAdapter).UnEquip();
+            }
         });
 
         //Test Bow

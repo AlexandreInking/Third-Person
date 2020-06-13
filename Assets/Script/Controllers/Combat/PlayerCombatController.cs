@@ -26,14 +26,14 @@ public class PlayerCombatController : CombatController
         controllerPack.GetController<PlayerInventoryController>().inventory
             .OnQuickSlotUnEquipped += (entry =>
             {
-                if (entry.Value is RangedWeapon)
+                if (entry.Value.Item is RangedWeapon)
                     actionPack.TakeAction<AimFreeAction>();
             });
     }
 
     private void Update()
     {
-        if (inventory.ActiveEntry.Key.isEquipped && inventory.ActiveEntry.Value is RangedWeapon)
+        if (inventory.ActiveEntry.Key.isEquipped && inventory.ActiveEntry.Value.Item is RangedWeapon)
         {
             actionPack.TakeAction<UpdateAimAction>();
             actionPack.TakeAction<ToggleAimAction>();
@@ -47,7 +47,7 @@ public class PlayerCombatController : CombatController
 
     private void OnGUI()
     {
-        if (inventory.ActiveEntry.Key.isEquipped && inventory.ActiveEntry.Value is RangedWeapon)
+        if (inventory.ActiveEntry.Key.isEquipped && inventory.ActiveEntry.Value.Item is RangedWeapon)
             actionPack.TakeAction<DrawTargetAction>();
     }
 }
