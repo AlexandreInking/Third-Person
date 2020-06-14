@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54f7d4a0ab71d7f46b93c9e4e7aca3d3, type: 3}
   m_Name: Player Inventory
   m_EditorClassIdentifier: 
-  currentlyEquipped: {fileID: 0}
   testBow: {fileID: 11400000, guid: 8d35042e32a25e94988fd347b2ca90c5, type: 2}
+  testMag: {fileID: 11400000, guid: 39e0b270d8940b247bc2e6b53eb38904, type: 2}
   rangedWeapon: {fileID: 0}
   leftHand: {fileID: 0}
   rightHand: {fileID: 0}

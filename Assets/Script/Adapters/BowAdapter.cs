@@ -84,7 +84,9 @@ public class BowAdapter : RangedWeaponAdapter
             if (adapter.clipCount > 0)
             {
                 //Dettach Arrow ; Put Arrow Back in Quiver
-                bow.magazine += adapter.clipCount;
+
+                inventory.LoadMagazine(bow.slug, adapter.clipCount);
+
                 adapter.clipCount = 0;
             }
 

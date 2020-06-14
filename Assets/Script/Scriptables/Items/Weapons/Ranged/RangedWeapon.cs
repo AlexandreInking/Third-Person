@@ -14,6 +14,10 @@ public class RangedWeapon : Weapon
     [Header("Rounds")]
     [Tooltip("Amount of Rounds A Single Clip Can Hold")]
     public int clipSize = 1;
-    [Tooltip("Total Bullets Outside Clip")]
-    public int magazine = 50;
+
+    //[Tooltip("Total Bullets Outside Clip")]
+    //public int magazine = 50;
+
+    [Tooltip("Type of Rounds (Cartridge) for the weapon")]
+    public Slug slug;
 }

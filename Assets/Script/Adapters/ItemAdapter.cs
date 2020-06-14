@@ -15,6 +15,9 @@ public abstract class ItemAdapter : Adapter
 
     protected PlayerInventory inventory;
 
+    /// <summary>
+    /// Is Active (Equipped)
+    /// </summary>
     protected bool isEquipped = false;
 
     public override void Initialize()

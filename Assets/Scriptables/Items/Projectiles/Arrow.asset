@@ -9,10 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4b6e4073eb8fc54fba28954e10da38f, type: 3}
-  m_Name: ArrowMagazine
+  m_Script: {fileID: 11500000, guid: 5b20154a1e54149458f55128e9a94cd8, type: 3}
+  m_Name: Arrow
   m_EditorClassIdentifier: 
   itemPrefab: {fileID: 0}
   flavor: {fileID: 0}
-  count: 0
-  slug: {fileID: 0}

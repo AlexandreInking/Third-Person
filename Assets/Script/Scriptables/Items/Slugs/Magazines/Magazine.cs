@@ -1,10 +1,10 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Magazine<T> : Item where T : Slug
+[CreateAssetMenu(fileName = nameof(Magazine), menuName = "SO/Slugs/Magazine")]
+public class Magazine : Item
 {
     public int count;
 
-    public T slug;
+    public Slug slug;
 }

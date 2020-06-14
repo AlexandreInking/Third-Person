@@ -56,7 +56,7 @@ public class PlayerInventory : Inventory
     #endregion
 
     public Bow testBow;
-    public ArrowMagazine testMag;
+    public Magazine testMag;
 
     #region Containers
 
@@ -267,39 +267,85 @@ public class PlayerInventory : Inventory
         return keyPair;
     }
 
-    public KeyValuePair<Slot, Item> GetMagazine<T>() where T : Slug
+    /// <summary>
+    /// Gets Magazine by <see cref="slug"/> Type, Changes Made to The returned instance Will Not Apply
+    /// </summary>
+    /// <param name="slug">Slug Type</param>
+    /// <returns>Magazine</returns>
+    public Magazine GetMagazine(Slug slug)
     {
-        KeyValuePair<Slot, Item> keyPair = Library
-            .FirstOrDefault(pair => pair.Value is Magazine<T>);
+        Type slugType = slug.GetType();
+
+        KeyValuePair <Slot, Item> keyPair = Library
+            .FirstOrDefault(pair => pair.Value is Magazine && (pair.Value as Magazine).slug == slug);
+
+        return keyPair.Value as Magazine;
+    }
+
+    /// <summary>
+    /// Gets Magazine Inventory Entry by <see cref="slug"/> Type, Changes Made to The returned instance Will Not Apply
+    /// </summary>
+    /// <param name="slug">Slug Type</param>
+    /// <returns>Magazine Inventory Entry</returns>
+    public KeyValuePair<Slot, Item> GetMagazineEntry(Slug slug)
+    {
+        KeyValuePair <Slot, Item> keyPair = Library
+            .FirstOrDefault(pair => pair.Value is Magazine && (pair.Value as Magazine).slug == slug);
 
         return keyPair;
     }
 
-    public void LoadMagazine<T>(int rounds) where T : Slug
-    {
-        KeyValuePair<Slot, Item> magazine = GetMagazine<T>();
 
-        (Library[magazine.Key] as Magazine<T>).count += rounds;
+    /// <summary>
+    /// Add <see cref="rounds"/> amount of Rounds to Magazine with <see cref="slug"/> type
+    /// </summary>
+    /// <param name="slug">Slug Type</param>
+    /// <param name="rounds">Rounds To Load</param>
+    public void LoadMagazine(Slug slug, int rounds)
+    {
+        KeyValuePair<Slot, Item> magazine = GetMagazineEntry(slug);
+
+        (Library[magazine.Key] as Magazine).count += rounds;
     }
 
-    public void UnLoadMagazine<T>(int rounds) where T : Slug
+    /// <summary>
+    /// Remove <see cref="rounds"/> amount of Rounds to Magazine with <see cref="slug"/> type
+    /// </summary>
+    /// <param name="slug">Slug Type</param>
+    /// <param name="rounds">Rounds To UnLoad</param>
+    public void UnLoadMagazine(Slug slug, int rounds)
     {
-        KeyValuePair<Slot, Item> magazine = GetMagazine<T>();
+        KeyValuePair<Slot, Item> magazine = GetMagazineEntry(slug);
 
-        (Library[magazine.Key] as Magazine<T>).count -= rounds;
+        (Library[magazine.Key] as Magazine).count -= rounds;
     }
 
-    public void AddMagazine<T>(Magazine<T> magazine) where T : Slug
+    /// <summary>
+    /// Empty out Magazine
+    /// </summary>
+    /// <param name="slug">Slug Type</param>
+    public void ClearMagazine(Slug slug)
+    {
+        KeyValuePair<Slot, Item> magazine = GetMagazineEntry(slug);
+
+        (Library[magazine.Key] as Magazine).count = 0;
+    }
+
+    /// <summary>
+    /// Add Magazine
+    /// </summary>
+    /// <param name="magazine">Magazine To Add</param>
+    public void AddMagazine(Magazine magazine)
     {
         //Check if Magazine Exists
-        KeyValuePair<Slot, Item> old = GetMagazine<T>();
+        KeyValuePair<Slot, Item> old = GetMagazineEntry(magazine.slug);
 
         if (old.Value == null)
         {
-            //Needs Revisit
+            //TODO: Different Slot for Ammo??
             Slot slot = new Slot
             {
-                index = UnityEngine.Random.Range(10, 20),
+                index = GameConstants.MAGAZINE_INDEX,
             };
 
             Library.Add(slot, magazine);
@@ -308,7 +354,7 @@ public class PlayerInventory : Inventory
         else
         {
             //Add to Existing
-            (Library[old.Key] as Magazine<T>).count += magazine.count;
+            (Library[old.Key] as Magazine).count += magazine.count;
         }
     }
 }

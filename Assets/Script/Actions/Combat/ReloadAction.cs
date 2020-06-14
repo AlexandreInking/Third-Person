@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ReloadAction : Action
@@ -46,7 +47,7 @@ public class ReloadAction : Action
             return;
         }
 
-        if (weapon.magazine <= 0)
+        if (inventory.GetMagazine(weapon.slug).count <= 0)
         {
             //eMPTY mAG
             Debug.LogError("Empty Magazine");
@@ -68,18 +69,18 @@ public class ReloadAction : Action
         //Remaining Clip Slots
         int open = weapon.clipSize - adapter.clipCount;
 
-        if (weapon.magazine > open)
+        if (inventory.GetMagazine(weapon.slug).count > open)
         {
             adapter.clipCount = weapon.clipSize;
 
-            weapon.magazine -= open;
+            inventory.UnLoadMagazine(weapon.slug, open);
         }
 
         else
         {
-            adapter.clipCount += weapon.magazine;
+            adapter.clipCount += inventory.GetMagazine(weapon.slug).count;
 
-            weapon.magazine = 0;
+            inventory.ClearMagazine(weapon.slug);
         }
     }
 }

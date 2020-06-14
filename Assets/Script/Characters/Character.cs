@@ -41,7 +41,6 @@ public abstract class Character : MonoBehaviour, ICharacter
 
     #endregion
 
-
     #region AnimationEvent
 
     public delegate void AnimationEvent(string eventTag);
@@ -54,7 +53,6 @@ public abstract class Character : MonoBehaviour, ICharacter
     }
 
     #endregion
-
 
     public ControllerPack controllerPack;
 

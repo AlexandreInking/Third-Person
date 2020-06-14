@@ -122,4 +122,10 @@ public class GameConstants
     #endregion
 
     #endregion
+
+    #region Inventory
+
+    public static int MAGAZINE_INDEX = 100;
+
+    #endregion
 }

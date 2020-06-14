@@ -9,12 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2836e8afb0b08f244a2f362d167364cd, type: 3}
-  m_Name: Bow
+  m_Script: {fileID: 11500000, guid: 73e3d24324c61fe4e96f84211c148279, type: 3}
+  m_Name: Arrow Magazine
   m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 4788361249006545032, guid: e2d7dbdc061829943bed4b55fb59ac7a,
-    type: 3}
-  flavor: {fileID: 11400000, guid: ad47498050d4a9e4e953745d077850dd, type: 2}
-  fireRate: 1
-  clipSize: 1
+  itemPrefab: {fileID: 0}
+  flavor: {fileID: 0}
+  count: 0
   slug: {fileID: 11400000, guid: 310d671dc68c3d1419d2ee9a4f1408b6, type: 2}
