@@ -37,7 +37,7 @@ public class ReloadAction : Action
     {
         RangedWeapon weapon = inventory.ActiveEntry.Value.Item as RangedWeapon;
 
-        RangedWeaponAdapter adapter = inventory.ActiveEntry.Value.Adapter as RangedWeaponAdapter;
+        RangedAdapter adapter = inventory.ActiveEntry.Value.Adapter as RangedAdapter;
 
         if (adapter.clipCount == weapon.clipSize)
         {
@@ -64,7 +64,7 @@ public class ReloadAction : Action
     {
         RangedWeapon weapon = inventory.ActiveEntry.Value.Item as RangedWeapon;
 
-        RangedWeaponAdapter adapter = inventory.ActiveEntry.Value.Adapter as RangedWeaponAdapter;
+        RangedAdapter adapter = inventory.ActiveEntry.Value.Adapter as RangedAdapter;
 
         //Remaining Clip Slots
         int open = weapon.clipSize - adapter.clipCount;

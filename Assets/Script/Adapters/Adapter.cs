@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//TODO : Check Adapter References If Not Global
 public abstract class Adapter : MonoBehaviour
 {
     protected Character actor;

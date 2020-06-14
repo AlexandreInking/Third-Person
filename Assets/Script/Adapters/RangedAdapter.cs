@@ -3,8 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//TODO : Move clip count to Adapter
-public class RangedWeaponAdapter : ItemAdapter
+public class RangedAdapter : ItemAdapter
 {
     [Tooltip("Currently Inside Clip")]
     [HideInInspector] public int clipCount = 0;

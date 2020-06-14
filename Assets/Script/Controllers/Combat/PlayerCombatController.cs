@@ -1,9 +1,10 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerCombatController : CombatController
 {
     PlayerInventory inventory;
+
+    InventoryController inventoryController;
 
     public override void OnInitialize()
     {
@@ -14,40 +15,69 @@ public class PlayerCombatController : CombatController
 
     private void Start()
     {
-        AnimationController animationController = controllerPack.GetController<AnimationController>();
+        inventoryController = controllerPack.GetController<InventoryController>();
 
         controllerPack.GetController<LocomotionController>()
             .actionPack.AddActionInitiatedListener<StartSprintAction>(action =>
             {
-                if (controlledCharacter.GetComponent<Animator>().GetBool(GameConstants.aimingHash))
+                if (aiming)
                     actionPack.TakeAction<AimFreeAction>();
             });
 
-        controllerPack.GetController<PlayerInventoryController>().inventory
-            .OnQuickSlotUnEquipped += (entry =>
+        controllerPack.GetController<PlayerInventoryController>()
+            .inventory.OnQuickSlotUnEquipped += (entry =>
             {
-                if (entry.Value.Item is RangedWeapon)
-                    actionPack.TakeAction<AimFreeAction>();
+                //if (entry.Value.Item is RangedWeapon)
+                actionPack.TakeAction<AimFreeAction>();
             });
     }
 
     private void Update()
     {
-        if (inventory.ActiveEntry.Key.isEquipped && inventory.ActiveEntry.Value.Item is RangedWeapon)
+        if (inventoryController.Equipped is RangedWeapon)
         {
             actionPack.TakeAction<UpdateAimAction>();
+
             actionPack.TakeAction<ToggleAimAction>();
         }
 
-        if (Input.GetButtonDown(GameConstants.Fire1))
+
+        #region Attack Mode
+
+        if (inventoryController.Equipped is Weapon)
         {
-            actionPack.TakeAction<AttackAction>();
+            switch ((inventoryController.Equipped as Weapon).AttackMode)
+            {
+                case AttackMode.CONTINIOUS:
+
+                    if (Input.GetButton(GameConstants.Fire1))
+                    {
+                        actionPack.TakeAction<AttackAction>();
+                    }
+
+                    break;
+
+                case AttackMode.SINGULAR:
+
+                    if (Input.GetButtonDown(GameConstants.Fire1))
+                    {
+                        actionPack.TakeAction<AttackAction>();
+                    }
+
+                    break;
+                default:
+                    break;
+            }
         }
+
+        #endregion
     }
 
     private void OnGUI()
     {
-        if (inventory.ActiveEntry.Key.isEquipped && inventory.ActiveEntry.Value.Item is RangedWeapon)
+        if (inventoryController.Equipped is RangedWeapon)
+        {
             actionPack.TakeAction<DrawTargetAction>();
+        }
     }
 }

@@ -18,7 +18,6 @@ public class AnimationController : Controller
 
     #endregion
 
-
     #region StateComplete
 
     public delegate void StateComplete(string state);
@@ -31,7 +30,6 @@ public class AnimationController : Controller
     }
 
     #endregion
-
 
     /// <summary>
     /// Key is Layer Index and Value is State String

@@ -55,6 +55,7 @@ public class PlayerInventory : Inventory
 
     #endregion
 
+    //Test Items
     public Bow testBow;
     public Magazine testMag;
 
@@ -72,10 +73,23 @@ public class PlayerInventory : Inventory
 
     public Dictionary<Slot, Volume> HotBar = new Dictionary<Slot, Volume>();
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
-        //Init Hot Bar With {i} Slots
-        for (int i = 0; i < 5; i++)
+        base.OnEnable();
+
+        InitializeHotBar();
+
+        //Add Test Items
+        AddItem(testBow);
+        AddItem(testMag);
+    }
+
+    /// <summary>
+    /// Slots in <see cref="GameConstants.PlayerSlots"/>
+    /// </summary>
+    public void InitializeHotBar()
+    {
+        for (int i = 0; i < GameConstants.PlayerSlots.Count; i++)
         {
             Slot slot = new Slot()
             {
@@ -91,30 +105,8 @@ public class PlayerInventory : Inventory
             });
         }
 
-        //Init Library With {i} Slots
-        //for (int i = 0; i < 5; i++)
-        //{
-        //    Slot slot = new Slot()
-        //    {
-        //        index = i,
-        //        isEquipped = false
-        //    };
-
-        //    Library.Add(slot, null);
-        //}
-
         //Init ActiveEntry
         ActiveEntry = GetHotBarEntry(0);
-
-        //Add Test Bow
-        Slot bowSlot = new Slot()
-        {
-            index = 2,
-            isEquipped = false
-        };
-
-        Library.Add(bowSlot, testBow);
-        AddMagazine(testMag);
     }
 
     /// <summary>
@@ -242,119 +234,13 @@ public class PlayerInventory : Inventory
     /// </summary>
     /// <param name="slotIndex">Index of Slot Entry</param>
     /// <returns></returns>
-    public KeyValuePair<Slot, Item> GetInventoryEntry(int slotIndex)
-    {
-        KeyValuePair<Slot, Item> keyPair = Library.FirstOrDefault(pair => pair.Key.index.Equals(slotIndex));
-
-        if (keyPair.Equals(null))
-            Debug.LogError($"Library Slot {slotIndex} Not Initialized : Out Of Bounds");
-
-        return keyPair;
-    }
-
-    /// <summary>
-    /// Changes Made to The returned instance Will Not Apply
-    /// </summary>
-    /// <param name="slotIndex">Index of Slot Entry</param>
-    /// <returns></returns>
     public KeyValuePair<Slot, Volume> GetHotBarEntry(int slotIndex)
     {
         KeyValuePair<Slot, Volume> keyPair = HotBar.FirstOrDefault(pair => pair.Key.index.Equals(slotIndex));
 
-        if (keyPair.Equals(null))
+        if (keyPair.Key == null)
             Debug.LogError($"Hot Bar Slot {slotIndex} Not Initialized : Out Of Bounds");
 
         return keyPair;
-    }
-
-    /// <summary>
-    /// Gets Magazine by <see cref="slug"/> Type, Changes Made to The returned instance Will Not Apply
-    /// </summary>
-    /// <param name="slug">Slug Type</param>
-    /// <returns>Magazine</returns>
-    public Magazine GetMagazine(Slug slug)
-    {
-        Type slugType = slug.GetType();
-
-        KeyValuePair <Slot, Item> keyPair = Library
-            .FirstOrDefault(pair => pair.Value is Magazine && (pair.Value as Magazine).slug == slug);
-
-        return keyPair.Value as Magazine;
-    }
-
-    /// <summary>
-    /// Gets Magazine Inventory Entry by <see cref="slug"/> Type, Changes Made to The returned instance Will Not Apply
-    /// </summary>
-    /// <param name="slug">Slug Type</param>
-    /// <returns>Magazine Inventory Entry</returns>
-    public KeyValuePair<Slot, Item> GetMagazineEntry(Slug slug)
-    {
-        KeyValuePair <Slot, Item> keyPair = Library
-            .FirstOrDefault(pair => pair.Value is Magazine && (pair.Value as Magazine).slug == slug);
-
-        return keyPair;
-    }
-
-
-    /// <summary>
-    /// Add <see cref="rounds"/> amount of Rounds to Magazine with <see cref="slug"/> type
-    /// </summary>
-    /// <param name="slug">Slug Type</param>
-    /// <param name="rounds">Rounds To Load</param>
-    public void LoadMagazine(Slug slug, int rounds)
-    {
-        KeyValuePair<Slot, Item> magazine = GetMagazineEntry(slug);
-
-        (Library[magazine.Key] as Magazine).count += rounds;
-    }
-
-    /// <summary>
-    /// Remove <see cref="rounds"/> amount of Rounds to Magazine with <see cref="slug"/> type
-    /// </summary>
-    /// <param name="slug">Slug Type</param>
-    /// <param name="rounds">Rounds To UnLoad</param>
-    public void UnLoadMagazine(Slug slug, int rounds)
-    {
-        KeyValuePair<Slot, Item> magazine = GetMagazineEntry(slug);
-
-        (Library[magazine.Key] as Magazine).count -= rounds;
-    }
-
-    /// <summary>
-    /// Empty out Magazine
-    /// </summary>
-    /// <param name="slug">Slug Type</param>
-    public void ClearMagazine(Slug slug)
-    {
-        KeyValuePair<Slot, Item> magazine = GetMagazineEntry(slug);
-
-        (Library[magazine.Key] as Magazine).count = 0;
-    }
-
-    /// <summary>
-    /// Add Magazine
-    /// </summary>
-    /// <param name="magazine">Magazine To Add</param>
-    public void AddMagazine(Magazine magazine)
-    {
-        //Check if Magazine Exists
-        KeyValuePair<Slot, Item> old = GetMagazineEntry(magazine.slug);
-
-        if (old.Value == null)
-        {
-            //TODO: Different Slot for Ammo??
-            Slot slot = new Slot
-            {
-                index = GameConstants.MAGAZINE_INDEX,
-            };
-
-            Library.Add(slot, magazine);
-        }
-
-        else
-        {
-            //Add to Existing
-            (Library[old.Key] as Magazine).count += magazine.count;
-        }
     }
 }

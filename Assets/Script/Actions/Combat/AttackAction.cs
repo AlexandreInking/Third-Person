@@ -32,7 +32,7 @@ public class AttackAction : Action
             {
                 case GameConstants.AE_Fire:
                     
-                    (inventory.ActiveEntry.Value.Adapter as RangedWeaponAdapter).clipCount--;
+                    (inventory.ActiveEntry.Value.Adapter as RangedAdapter).clipCount--;
 
                     break;
 
@@ -127,7 +127,7 @@ public class AttackAction : Action
         //Fire Rate Logic
         if (Time.time - shotFiredTime > weapon.fireRate)
         {
-            if ((inventory.ActiveEntry.Value.Adapter as RangedWeaponAdapter).clipCount <= 0)
+            if ((inventory.ActiveEntry.Value.Adapter as RangedAdapter).clipCount <= 0)
             {
                 //Empty Clip
 

@@ -42,7 +42,9 @@ class PlayerLocomotionController : LocomotionController
             .OnQuickSlotEquipped += (ActiveEntry => 
             {
                 if (ActiveEntry.Value.Item is RangedWeapon)
+                {
                     actionPack.TakeAction<StrafeAction>();
+                }
 
             });
 

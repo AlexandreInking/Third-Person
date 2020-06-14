@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerInventoryController : InventoryController
@@ -9,6 +10,16 @@ public class PlayerInventoryController : InventoryController
     public override void OnInitialize()
     {
         inventory = (controlledCharacter.profile as CombatantProfile).inventory as PlayerInventory;
+
+        inventory.OnQuickSlotEquipped += (entry =>
+        {
+            Equipped = inventory.ActiveEntry.Value.Item;
+        });
+
+        inventory.OnQuickSlotUnEquipped += (entry =>
+        {
+            Equipped = null;
+        });
 
         InitializeActionPack<InventoryActionPack>();
     }
@@ -26,7 +37,9 @@ public class PlayerInventoryController : InventoryController
         });
 
         //Test Bow
-        inventory.HoldQuickSlot(inventory.GetInventoryEntry(2), 2);
+        inventory.HoldQuickSlot(inventory.GetInventoryEntry(
+            inventory.Library.FirstOrDefault(pair => pair.Value == inventory.testBow).Key.index
+            ), 2);
     }
 
     private void Update()

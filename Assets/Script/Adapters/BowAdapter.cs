@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BowAdapter : RangedWeaponAdapter
+public class BowAdapter : RangedAdapter
 {
     [Space]
     [Header("Bow String")]
@@ -79,7 +79,7 @@ public class BowAdapter : RangedWeaponAdapter
 
             RangedWeapon bow = inventory.ActiveEntry.Value.Item as RangedWeapon;
 
-            RangedWeaponAdapter adapter = inventory.ActiveEntry.Value.Adapter as RangedWeaponAdapter;
+            RangedAdapter adapter = inventory.ActiveEntry.Value.Adapter as RangedAdapter;
 
             if (adapter.clipCount > 0)
             {
