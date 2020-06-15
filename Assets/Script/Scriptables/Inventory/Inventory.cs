@@ -58,17 +58,6 @@ public class Inventory : ScriptableObject
         }
 
         Library[keyPair.Key] = item;
-
-        //Add Single Clip On Ranged Weapon Added
-        if (item is RangedWeapon)
-        {
-            RangedWeapon weapon = item as RangedWeapon;
-
-            weapon.itemPrefab.TryGetComponent(out RangedAdapter adapter);
-
-            //TODO: Different Ammo Reset Work Around
-            adapter.clipCount = weapon.clipSize;
-        }
     }
 
     public void RemoveItem(int slotIndex)

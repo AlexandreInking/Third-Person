@@ -11,9 +11,9 @@ public class CombatProfile : ScriptableObject
     [Header("Aiming")]
     [Range(10f, 100f)]
     public float aimDistance = 30f;
-    [Range(-10f, 10f)]
+    [Range(-1f, 1f)]
     public float aimOffsetX = 0f;
-    [Range(-10f, 10f)]
+    [Range(-1f, 1f)]
     public float aimOffsetY = 0f;
     [Tooltip("All Layers except the once you want to ignore...Player | Friendly ")]
     public LayerMask aimLayers;

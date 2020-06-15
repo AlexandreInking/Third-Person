@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class DrawTargetAction : Action
 {
-    CombatController combatController;
+    CombatProfile combatProfile;
 
     PlayerInventory inventory;
 
-    Texture2D crossHair;
+    Sprite crossHair;
 
     int crossHairSize;
 
     public override void OnInitialize()
     {
-        combatController = actionPack.actionController as CombatController;
+        combatProfile = (actor.profile as CombatantProfile).combatProfile;
 
         inventory = (actor.profile as CombatantProfile).inventory as PlayerInventory;
 
@@ -22,11 +22,21 @@ public class DrawTargetAction : Action
         {
             if (entry.Value.Item is RangedWeapon)
             {
+                CameraManager.Instance.CrossHair.enabled = true;
+
                 RangedWeaponFlavor flavor = entry.Value.Item.flavor as RangedWeaponFlavor;
 
-                crossHair = flavor.crosshairTexture;
+                crossHair = flavor.TargetSprite;
 
-                crossHairSize = flavor.crosshairSize;
+                crossHairSize = flavor.TargetSize;
+            }
+        });
+
+        inventory.OnQuickSlotUnEquipped += (entry => 
+        {
+            if (entry.Value.Item is RangedWeapon)
+            {
+                CameraManager.Instance.CrossHair.enabled = false;
             }
         });
     }
@@ -38,11 +48,14 @@ public class DrawTargetAction : Action
 
     void Draw()
     {
-        Vector3 aimPositionOnScreen = Camera.main.WorldToScreenPoint(combatController.aimPosition);
+        CameraManager.Instance.CrossHair.sprite = crossHair;
 
-        aimPositionOnScreen.y = Screen.height - aimPositionOnScreen.y;
+        CameraManager.Instance.CrossHair.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, crossHairSize);
+        CameraManager.Instance.CrossHair.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, crossHairSize);
 
-        GUI.DrawTexture(new Rect(aimPositionOnScreen.x, aimPositionOnScreen.y,
-                    crossHairSize, crossHairSize), crossHair);
+        CameraManager.Instance.CrossHair.transform.position = new Vector3(
+            Screen.width * (0.5f + (combatProfile.aimOffsetX / 2)),
+            Screen.height * (0.5f + (combatProfile.aimOffsetY / 2)),
+            0);
     }
 }

@@ -28,9 +28,7 @@ public class UpdateAimAction : Action
     /// </summary>
     void GetAim()
     {
-        Vector3 aimOffset = new Vector3(combatProfile.aimOffsetX, combatProfile.aimOffsetY, 0);
-
-        Ray ray = new Ray(Camera.main.transform.position + aimOffset, Camera.main.transform.forward);
+        Ray ray = Camera.main.ScreenPointToRay(CameraManager.Instance.CrossHair.transform.position);
 
         combatController.aimPosition = ray.GetPoint(combatProfile.aimDistance);
 

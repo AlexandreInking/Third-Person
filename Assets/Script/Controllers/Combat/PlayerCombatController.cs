@@ -71,10 +71,8 @@ public class PlayerCombatController : CombatController
         }
 
         #endregion
-    }
 
-    private void OnGUI()
-    {
+        //Draw Target
         if (inventoryController.Equipped is RangedWeapon)
         {
             actionPack.TakeAction<DrawTargetAction>();

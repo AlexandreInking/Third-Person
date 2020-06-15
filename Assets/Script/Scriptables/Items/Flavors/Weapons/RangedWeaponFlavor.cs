@@ -12,6 +12,6 @@ public class RangedWeaponFlavor : WeaponFlavor
 
     [Space]
     [Header("Crosshair")]
-    public Texture2D crosshairTexture;
-    public int crosshairSize;
+    public Sprite TargetSprite;
+    public int TargetSize;
 }

@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aimDistance: 30
   aimOffsetX: 0
-  aimOffsetY: 3
+  aimOffsetY: 0.25
   aimLayers:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 55
   lookWeight: 1
   bodyWeight: 1
   headWeight: 1
