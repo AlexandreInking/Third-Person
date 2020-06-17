@@ -33,6 +33,8 @@ public class AirborneAction : Action
 
         animator.SetTrigger(GameConstants.airborneHash);
 
+        animator.ResetTrigger(GameConstants.landedHash);
+
         //Push Force Logic
         Vector3 forward = mainCamera.forward;
 

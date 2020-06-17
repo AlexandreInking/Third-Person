@@ -30,9 +30,9 @@ public class PlayerInventoryController : InventoryController
         {
             adapter.Actor = controlledCharacter;
 
-            if (adapter is ItemAdapter)
+            if (adapter is EqiuppableItemAdapter)
             {
-                (adapter as ItemAdapter).UnEquip();
+                (adapter as EqiuppableItemAdapter).UnEquip();
             }
         });
 

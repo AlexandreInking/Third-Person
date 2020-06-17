@@ -12,7 +12,7 @@ public enum AttackMode
     SINGULAR
 }
 
-public class Weapon : Item
+public abstract class Weapon : Item
 {
     [Space]
     [Tooltip("Weapon Attack Mode")]
@@ -30,5 +30,7 @@ public class Weapon : Item
             attackMode = value;
         }
     }
+
+    public abstract void Attack(Character attacker);
 }
       

@@ -12,6 +12,23 @@ public class BowAdapter : RangedAdapter
 
     Vector3 rootNockPosition;
 
+    AnimationController animationController;
+
+    #region Arrow Speed
+
+    float speedMultiplier = 1f;
+
+    float startTime = float.MinValue;
+
+    bool aimed = false;
+
+    [Space]
+    [Tooltip("Controls By How Much Arrow Speed is Multiplied Proportional to Pull Back")]
+    [SerializeField] float speedFator = 2f;
+    [SerializeField] float speedThreshold = 3.5f;
+
+    #endregion
+
     public override void Initialize()
     {
         base.Initialize();
@@ -20,7 +37,7 @@ public class BowAdapter : RangedAdapter
 
         CombatController combatController = actor.controllerPack.GetController<CombatController>();
 
-        AnimationController animationController = actor.controllerPack.GetController<AnimationController>();
+        animationController = actor.controllerPack.GetController<AnimationController>();
 
         CombatActionPack actionPack = combatController.actionPack as CombatActionPack;
 
@@ -46,6 +63,16 @@ public class BowAdapter : RangedAdapter
                 case GameConstants.AE_Nock:
 
                     Attach();
+
+                    break;
+
+                case GameConstants.AE_Aimed:
+
+                    startTime = Time.time;
+
+                    speedMultiplier = 1f;
+
+                    aimed = true;
 
                     break;
 
@@ -77,17 +104,15 @@ public class BowAdapter : RangedAdapter
                 return;
             }
 
-            RangedWeapon bow = inventory.ActiveEntry.Value.Item as RangedWeapon;
+            Bow bow = inventory.ActiveEntry.Value.Item as Bow;
 
-            RangedAdapter adapter = inventory.ActiveEntry.Value.Adapter as RangedAdapter;
-
-            if (adapter.clipCount > 0)
+            if (clipCount > 0)
             {
                 //Dettach Arrow ; Put Arrow Back in Quiver
 
-                inventory.LoadMagazine(bow.slug, adapter.clipCount);
+                inventory.LoadMagazine(bow.slug, clipCount);
 
-                adapter.clipCount = 0;
+                clipCount = 0;
             }
 
             actionPack.TakeAction<ReloadAction>();
@@ -123,6 +148,24 @@ public class BowAdapter : RangedAdapter
         });
     }
 
+    private void Update()
+    {
+        if (isEquipped)
+        {
+            if (aimed && animationController.state[GameConstants.RangedLayer] == GameConstants.AS_Aiming)
+            {
+                speedMultiplier += (Time.time - startTime) * Time.deltaTime;
+
+                if (speedMultiplier > speedThreshold)
+                {
+                    aimed = false;
+                }
+
+                ((inventory.ActiveEntry.Value.Item as Bow).slug as Projectile).speed =  (speedMultiplier / speedFator);
+            }
+        }
+    }
+
     /// <summary>
     /// Attaches Bow String
     /// </summary>
@@ -141,5 +184,10 @@ public class BowAdapter : RangedAdapter
         nock.SetParent(transform);
 
         nock.localPosition = rootNockPosition;
+
+        //Arrow Speed
+        aimed = false;
+
+        ((inventory.ActiveEntry.Value.Item as Bow).slug as Projectile).speed = 1;
     }
 }

@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b20154a1e54149458f55128e9a94cd8, type: 3}
   m_Name: Arrow
   m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 0}
+  itemPrefab: {fileID: 1679377528447283793, guid: 228f606805b633a478db5eb207076f7d,
+    type: 3}
   flavor: {fileID: 0}
+  range: 50
+  speed: 1

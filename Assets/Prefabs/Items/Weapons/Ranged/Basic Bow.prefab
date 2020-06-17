@@ -50,6 +50,8 @@ MonoBehaviour:
   EquipClip: {fileID: 7400000, guid: 9eb4e2386904b1547b03c01eb14d31aa, type: 2}
   UnEquipClip: {fileID: 7400000, guid: d4c9e1d0b0ef6e84ba392464ca6b01b9, type: 2}
   animation: {fileID: 3745741588723438320}
+  clipCount: 0
+  muzzle: {fileID: 4788361249006056616}
   nock: {fileID: 4788361249006056692}
 --- !u!111 &3745741588723438320
 Animation:
@@ -60,9 +62,9 @@ Animation:
   m_GameObject: {fileID: 4788361249006545032}
   m_Enabled: 1
   serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: d0c704bbe0d492d4184c8dbdad7d32ea, type: 2}
+  m_Animation: {fileID: 0}
   m_Animations:
-  - {fileID: 7400000, guid: d0c704bbe0d492d4184c8dbdad7d32ea, type: 2}
+  - {fileID: 0}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0

@@ -8,6 +8,8 @@ public class AttackAction : Action
 
     PlayerInventory inventory;
 
+    CombatController combatController;
+
     int fireHash;
 
     AnimationController animationController;
@@ -22,6 +24,8 @@ public class AttackAction : Action
 
         fireHash = Animator.StringToHash(GameConstants.Fire);
 
+        combatController = actionPack.actionController as CombatController;
+
         animationController = actor.controllerPack.GetController<AnimationController>();
 
         inventory = (actor.profile as CombatantProfile).inventory as PlayerInventory;
@@ -33,6 +37,10 @@ public class AttackAction : Action
                 case GameConstants.AE_Fire:
                     
                     (inventory.ActiveEntry.Value.Adapter as RangedAdapter).clipCount--;
+
+                    RangedWeapon weapon = inventory.ActiveEntry.Value.Item as RangedWeapon;
+
+                    weapon.Attack(actor);
 
                     break;
 

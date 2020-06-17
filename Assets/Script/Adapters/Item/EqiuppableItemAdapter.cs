@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ItemAdapter : Adapter
+public abstract class EqiuppableItemAdapter : Adapter
 {
     [Header("Equip | UnEquip")]
     [SerializeField] AnimationClip EquipClip;
