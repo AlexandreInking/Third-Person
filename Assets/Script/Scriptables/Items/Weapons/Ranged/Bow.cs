@@ -5,5 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = nameof(Bow), menuName = "SO/Weapons/Ranged/Bow")]
 public class Bow : RangedWeapon
 {
-    
+    private void OnEnable()
+    {
+        (slug as Projectile).speed = 1f;
+    }
 }
