@@ -82,7 +82,7 @@ public class GameConstants
 
     #endregion
 
-    #region State Hashs
+    #region State Short Name
 
     //Ranged Animation States
     public const string AS_Aiming = "Aiming";
@@ -91,7 +91,6 @@ public class GameConstants
     public const string AS_AimFire = "Aim Fire";
     public const string AS_Reload = "Reload";
 
-    //Ranged Animation States
     public const string AS_Locomotion = "Locomotion";
     public const string AS_TurnBlend = "Turn Blend";
 
