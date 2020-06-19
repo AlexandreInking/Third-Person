@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = nameof(Bow), menuName = "SO/Weapons/Ranged/Bow")]
-public class Bow : PolyCannon
+public class Bow : RangedWeapon
 {
-    protected override void OnEnable()
+    private void OnEnable()
     {
-        base.OnEnable();
-
-        (liveSlug as Projectile).speed = 1f;
+        (liveBarrel.liveSlug as Projectile).speed = 1f;
     }
 }

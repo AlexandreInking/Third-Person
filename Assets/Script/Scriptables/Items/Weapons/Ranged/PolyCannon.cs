@@ -4,45 +4,45 @@ using UnityEngine;
 
 public abstract class PolyCannon : RangedWeapon
 {
+    public List<Barrel> barrelVariants = new List<Barrel>();
+
     protected virtual void OnEnable()
     {
         //Add Live Slug
-        if (!slugVariants.Contains(liveSlug))
+        if (!barrelVariants.Contains(liveBarrel))
         {
-            slugVariants.Add(liveSlug);
+            barrelVariants.Add(liveBarrel);
         }
     }
 
-    public List<Slug> slugVariants = new List<Slug>();
-
-    public Slug NextVariant()
+    public Barrel NextVariant()
     {
-        if (GetLiveSlugIndex() + 1 == slugVariants.Count)
+        if (GetLiveSlugIndex() + 1 == barrelVariants.Count)
         {
-            return slugVariants[0];
+            return barrelVariants[0];
         }
 
         else
         {
-            return slugVariants[GetLiveSlugIndex() + 1];
+            return barrelVariants[GetLiveSlugIndex() + 1];
         }
     }
 
-    public Slug PreviousVariant()
+    public Barrel PreviousVariant()
     {
         if (GetLiveSlugIndex() == 0)
         {
-            return slugVariants[slugVariants.Count - 1];
+            return barrelVariants[barrelVariants.Count - 1];
         }
 
         else
         {
-            return slugVariants[GetLiveSlugIndex() - 1];
+            return barrelVariants[GetLiveSlugIndex() - 1];
         }
     }
 
     public int GetLiveSlugIndex()
     {
-        return slugVariants.IndexOf(liveSlug);
+        return barrelVariants.IndexOf(liveBarrel);
     }
 }

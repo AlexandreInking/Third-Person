@@ -20,11 +20,11 @@ public class SlugChangeAction : Action
 
         (inventory.ActiveEntry.Value.Adapter as RangedAdapter).clipCount = 0;
 
-        PolyCannon polyCannon = inventory.ActiveEntry.Value.Item as PolyCannon;
+        RangedWeapon weapon = inventory.ActiveEntry.Value.Item as RangedWeapon;
 
-        inventory.LoadMagazine(polyCannon.liveSlug, clipCount);
+        inventory.LoadMagazine(weapon.liveBarrel.liveSlug, clipCount);
 
-        polyCannon.liveSlug = polyCannon.NextVariant();
+        weapon.liveBarrel.liveSlug = (weapon.liveBarrel as PolyBarrel).NextVariant();
 
         actionPack.TakeAction<ReloadAction>();
     }

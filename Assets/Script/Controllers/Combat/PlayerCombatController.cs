@@ -39,6 +39,20 @@ public class PlayerCombatController : CombatController
             actionPack.TakeAction<UpdateAimAction>();
 
             actionPack.TakeAction<ToggleAimAction>();
+
+            #region Slug Change
+
+            RangedWeapon weapon = inventoryController.Equipped as RangedWeapon;
+
+            if (weapon.liveBarrel is PolyBarrel)
+            {
+                if (Input.GetButtonDown(GameConstants.Fire3))
+                {
+                    actionPack.TakeAction<SlugChangeAction>();
+                }
+            }
+
+            #endregion
         }
 
 
@@ -67,18 +81,6 @@ public class PlayerCombatController : CombatController
                     break;
                 default:
                     break;
-            }
-        }
-
-        #endregion
-
-        #region Slug Change
-
-        if (inventoryController.Equipped is PolyCannon)
-        {
-            if (Input.GetButtonDown(GameConstants.Fire3))
-            {
-                actionPack.TakeAction<SlugChangeAction>();
             }
         }
 

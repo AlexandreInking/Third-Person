@@ -39,7 +39,7 @@ public class ReloadAction : Action
 
         RangedAdapter adapter = inventory.ActiveEntry.Value.Adapter as RangedAdapter;
 
-        if (adapter.clipCount == weapon.clipSize)
+        if (adapter.clipCount == weapon.liveBarrel.clipSize)
         {
             //Full Clip
             Debug.LogError("Full Clip");
@@ -47,7 +47,7 @@ public class ReloadAction : Action
             return;
         }
 
-        if (inventory.GetMagazine(weapon.liveSlug).count <= 0)
+        if (inventory.GetMagazine(weapon.liveBarrel.liveSlug).count <= 0)
         {
             //eMPTY mAG
             Debug.LogError("Empty Magazine");
@@ -67,20 +67,20 @@ public class ReloadAction : Action
         RangedAdapter adapter = inventory.ActiveEntry.Value.Adapter as RangedAdapter;
 
         //Remaining Clip Slots
-        int open = weapon.clipSize - adapter.clipCount;
+        int open = weapon.liveBarrel.clipSize - adapter.clipCount;
 
-        if (inventory.GetMagazine(weapon.liveSlug).count > open)
+        if (inventory.GetMagazine(weapon.liveBarrel.liveSlug).count > open)
         {
-            adapter.clipCount = weapon.clipSize;
+            adapter.clipCount = weapon.liveBarrel.clipSize;
 
-            inventory.UnLoadMagazine(weapon.liveSlug, open);
+            inventory.UnLoadMagazine(weapon.liveBarrel.liveSlug, open);
         }
 
         else
         {
-            adapter.clipCount += inventory.GetMagazine(weapon.liveSlug).count;
+            adapter.clipCount += inventory.GetMagazine(weapon.liveBarrel.liveSlug).count;
 
-            inventory.ClearMagazine(weapon.liveSlug);
+            inventory.ClearMagazine(weapon.liveBarrel.liveSlug);
         }
     }
 }

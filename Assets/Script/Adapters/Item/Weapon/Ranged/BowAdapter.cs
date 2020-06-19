@@ -105,7 +105,7 @@ public class BowAdapter : RangedAdapter
                         return;
                     }
 
-                    Arrow arrow = (inventory.ActiveEntry.Value.Item as Bow).liveSlug as Arrow;
+                    Arrow arrow = (inventory.ActiveEntry.Value.Item as Bow).liveBarrel.liveSlug as Arrow;
 
                     if (slugChange)
                     {
@@ -142,7 +142,7 @@ public class BowAdapter : RangedAdapter
             {
                 //Dettach Arrow ; Put Arrow Back in Quiver
 
-                inventory.LoadMagazine(bow.liveSlug, clipCount);
+                inventory.LoadMagazine(bow.liveBarrel.liveSlug, clipCount);
 
                 clipCount = 0;
             }
@@ -214,7 +214,7 @@ public class BowAdapter : RangedAdapter
                     aimed = false;
                 }
 
-                ((inventory.ActiveEntry.Value.Item as Bow).liveSlug as Projectile).speed =  (speedMultiplier / speedFator);
+                ((inventory.ActiveEntry.Value.Item as Bow).liveBarrel.liveSlug as Projectile).speed =  (speedMultiplier / speedFator);
             }
         }
     }
@@ -241,7 +241,7 @@ public class BowAdapter : RangedAdapter
         //Arrow Speed
         aimed = false;
 
-        ((inventory.ActiveEntry.Value.Item as Bow).liveSlug as Projectile).speed = 1;
+        ((inventory.ActiveEntry.Value.Item as Bow).liveBarrel.liveSlug as Projectile).speed = 1;
 
         if (dummyArrowInstance != null)
         {

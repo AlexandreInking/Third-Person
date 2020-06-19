@@ -133,7 +133,7 @@ public class AttackAction : Action
         }
 
         //Fire Rate Logic
-        if (Time.time - shotFiredTime > weapon.fireRate)
+        if (Time.time - shotFiredTime > weapon.liveBarrel.fireRate)
         {
             if ((inventory.ActiveEntry.Value.Adapter as RangedAdapter).clipCount <= 0)
             {
