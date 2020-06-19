@@ -8,13 +8,13 @@ public class ProjectileAdapter : UnEqiuppableItemAdapter
 
     #region Impact
 
-    public delegate void Impact();
+    public delegate void Impact(Collision collision);
 
     public event Impact OnImpact;
 
-    public void TriggerImpact()
+    public void TriggerImpact(Collision collision)
     {
-        OnImpact?.Invoke();
+        OnImpact?.Invoke(collision);
     }
 
     #endregion
@@ -29,13 +29,13 @@ public class ProjectileAdapter : UnEqiuppableItemAdapter
     {
         Destroy(gameObject, lifeTime);
 
-        OnImpact += delegate 
+        OnImpact += (collision =>
         {
-            Collided();
-        };
+            Collided(collision);
+        });
     }
 
-    public virtual void Collided()
+    public virtual void Collided(Collision collision)
     {
         collided = true;
     }

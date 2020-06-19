@@ -53,6 +53,10 @@ MonoBehaviour:
   clipCount: 0
   muzzle: {fileID: 4788361249006056616}
   nock: {fileID: 4788361249006056692}
+  dummyArrow: {fileID: 1679377528447283793, guid: a5fe6a79015a8b24482e697a46ba244b,
+    type: 3}
+  speedFator: 2
+  speedThreshold: 3.5
 --- !u!111 &3745741588723438320
 Animation:
   m_ObjectHideFlags: 0

@@ -58,6 +58,7 @@ public class PlayerInventory : Inventory
     //Test Items
     public Bow testBow;
     public Magazine testMag;
+    public Magazine testMag2;
 
     #region Containers
 
@@ -82,6 +83,7 @@ public class PlayerInventory : Inventory
         //Add Test Items
         AddItem(testBow);
         AddItem(testMag);
+        AddItem(testMag2);
     }
 
     /// <summary>

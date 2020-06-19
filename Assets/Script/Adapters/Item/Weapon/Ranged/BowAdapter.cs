@@ -10,6 +10,8 @@ public class BowAdapter : RangedAdapter
     [Tooltip("Bow String Attach | Dettach")]
     [SerializeField] Transform nock;
 
+    GameObject dummyArrowInstance;
+
     Vector3 rootNockPosition;
 
     AnimationController animationController;
@@ -28,6 +30,8 @@ public class BowAdapter : RangedAdapter
     [SerializeField] float speedThreshold = 3.5f;
 
     #endregion
+
+    bool slugChange = false;
 
     public override void Initialize()
     {
@@ -57,6 +61,8 @@ public class BowAdapter : RangedAdapter
             {
                 return;
             }
+
+            const string AE_Draw = "Draw";
 
             switch (eventTag)
             {
@@ -92,6 +98,32 @@ public class BowAdapter : RangedAdapter
 
                     break;
 
+                case AE_Draw:
+
+                    if (!isEquipped)
+                    {
+                        return;
+                    }
+
+                    Arrow arrow = (inventory.ActiveEntry.Value.Item as Bow).liveSlug as Arrow;
+
+                    if (slugChange)
+                    {
+                        slugChange = false;
+
+                        if (combatController.aiming)
+                        {
+                            dummyArrowInstance = Instantiate(arrow.dummyPrefab, inventory.rightHand);
+                        }
+                    }
+
+                    else
+                    {
+                        dummyArrowInstance = Instantiate(arrow.dummyPrefab, inventory.rightHand);
+                    }
+
+                    break;
+
                 default:
                     break;
             }
@@ -110,7 +142,7 @@ public class BowAdapter : RangedAdapter
             {
                 //Dettach Arrow ; Put Arrow Back in Quiver
 
-                inventory.LoadMagazine(bow.slug, clipCount);
+                inventory.LoadMagazine(bow.liveSlug, clipCount);
 
                 clipCount = 0;
             }
@@ -128,6 +160,27 @@ public class BowAdapter : RangedAdapter
             Dettach();
 
             actionPack.GetAction<ReloadAction>().Reload();
+        });
+
+        actionPack.AddActionInitiatedListener<ReloadAction>(action => 
+        {
+            if (!isEquipped)
+            {
+                return;
+            }
+
+            Dettach();
+        });
+
+        actionPack.AddActionInitiatedListener<SlugChangeAction>(action => 
+        {
+            if (!isEquipped)
+            {
+                return;
+            }
+
+            slugChange = true;
+
         });
 
         animationController.OnStateInitialized += (state =>
@@ -161,7 +214,7 @@ public class BowAdapter : RangedAdapter
                     aimed = false;
                 }
 
-                ((inventory.ActiveEntry.Value.Item as Bow).slug as Projectile).speed =  (speedMultiplier / speedFator);
+                ((inventory.ActiveEntry.Value.Item as Bow).liveSlug as Projectile).speed =  (speedMultiplier / speedFator);
             }
         }
     }
@@ -188,6 +241,11 @@ public class BowAdapter : RangedAdapter
         //Arrow Speed
         aimed = false;
 
-        ((inventory.ActiveEntry.Value.Item as Bow).slug as Projectile).speed = 1;
+        ((inventory.ActiveEntry.Value.Item as Bow).liveSlug as Projectile).speed = 1;
+
+        if (dummyArrowInstance != null)
+        {
+            Destroy(dummyArrowInstance);
+        }
     }
 }

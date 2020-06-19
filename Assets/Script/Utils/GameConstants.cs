@@ -9,6 +9,7 @@ public class GameConstants
     public static readonly string Horizontal = "Horizontal";
     public static readonly string Fire1 = "Fire1";
     public static readonly string Fire2 = "Fire2";
+    public static readonly string Fire3 = "Fire3";
     public static readonly string Sprint = "Sprint";
     public static readonly string Walk = "Walk";
     public static readonly string Crouch = "Crouch";

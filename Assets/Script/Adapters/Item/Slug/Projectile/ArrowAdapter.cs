@@ -12,16 +12,18 @@ public class ArrowAdapter : ProjectileAdapter
     }
 
 
-    public override void Collided()
+    public override void Collided(Collision collision)
     {
-        base.Collided();
+        base.Collided(collision);
 
         rBody.constraints = RigidbodyConstraints.FreezeAll;
+
+        transform.SetParent(collision.transform);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        TriggerImpact();
+        TriggerImpact(collision);
 
         //Debug.LogError(collision.transform);
     }

@@ -72,6 +72,18 @@ public class PlayerCombatController : CombatController
 
         #endregion
 
+        #region Slug Change
+
+        if (inventoryController.Equipped is PolyCannon)
+        {
+            if (Input.GetButtonDown(GameConstants.Fire3))
+            {
+                actionPack.TakeAction<SlugChangeAction>();
+            }
+        }
+
+        #endregion
+
         //Draw Target
         if (inventoryController.Equipped is RangedWeapon)
         {

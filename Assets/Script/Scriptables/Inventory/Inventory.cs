@@ -46,18 +46,20 @@ public class Inventory : ScriptableObject
 
     public void AddItem(Item item)
     {
+        if (item is Magazine)
+        {
+            AddMagazine(item as Magazine);
+
+            return;
+        }
+
         KeyValuePair<Slot, Item> keyPair = GetBlankEntry();
 
         Library.Remove(keyPair.Key);
 
         keyPair.Key.isEquipped = true;
 
-        if (item is Magazine)
-        {
-            AddMagazine(item as Magazine);
-        }
-
-        Library[keyPair.Key] = item;
+        Library.Add(keyPair.Key, item);
     }
 
     public void RemoveItem(int slotIndex)
@@ -166,7 +168,13 @@ public class Inventory : ScriptableObject
 
         if (old.Value == null)
         {
-            Library[GetBlankEntry().Key] = magazine;
+            KeyValuePair<Slot, Item> blankEntry = GetBlankEntry();
+
+            Library.Remove(blankEntry.Key);
+
+            blankEntry.Key.isEquipped = true;
+
+            Library.Add(blankEntry.Key, magazine);
         }
 
         else

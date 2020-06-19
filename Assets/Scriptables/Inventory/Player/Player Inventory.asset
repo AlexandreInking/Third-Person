@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   testBow: {fileID: 11400000, guid: 8d35042e32a25e94988fd347b2ca90c5, type: 2}
   testMag: {fileID: 11400000, guid: 39e0b270d8940b247bc2e6b53eb38904, type: 2}
+  testMag2: {fileID: 11400000, guid: 0e8fd25e950885543a718c762c2f7dd2, type: 2}
   rangedWeapon: {fileID: 0}
   leftHand: {fileID: 0}
   rightHand: {fileID: 0}

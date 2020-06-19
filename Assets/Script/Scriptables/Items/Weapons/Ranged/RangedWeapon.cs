@@ -19,11 +19,11 @@ public class RangedWeapon : Weapon
     //public int magazine = 50;
 
     [Tooltip("Type of Rounds (Cartridge) for the weapon")]
-    public Slug slug;
+    public Slug liveSlug;
 
     public override void Attack(Character attacker)
     {
-        if (slug is Projectile)
+        if (liveSlug is Projectile)
         {
             FireProjectile(attacker);
         }
@@ -35,7 +35,7 @@ public class RangedWeapon : Weapon
 
         RangedAdapter adapter = volume.Adapter as RangedAdapter;
 
-        Projectile projectile = this.slug as Projectile;
+        Projectile projectile = this.liveSlug as Projectile;
 
         Vector3 aimPosition = shooter.controllerPack.GetController<CombatController>().aimPosition;
 

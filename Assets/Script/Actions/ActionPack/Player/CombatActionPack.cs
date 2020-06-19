@@ -29,5 +29,7 @@ public class CombatActionPack : ActionPack
         #endregion
 
         InitializeAction<AttackAction>();
+
+        InitializeAction<SlugChangeAction>();
     }
 }

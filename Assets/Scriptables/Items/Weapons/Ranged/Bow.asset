@@ -18,4 +18,7 @@ MonoBehaviour:
   attackMode: 1
   fireRate: 1
   clipSize: 1
-  slug: {fileID: 11400000, guid: 310d671dc68c3d1419d2ee9a4f1408b6, type: 2}
+  liveSlug: {fileID: 11400000, guid: b198bca6e06c9cb4c95af9ccd139378b, type: 2}
+  slugVariants:
+  - {fileID: 11400000, guid: 0c3a9e12988344746af6c366e0bb2c70, type: 2}
+  - {fileID: 11400000, guid: b198bca6e06c9cb4c95af9ccd139378b, type: 2}
