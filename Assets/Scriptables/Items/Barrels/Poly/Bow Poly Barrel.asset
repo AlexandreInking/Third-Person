@@ -14,8 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemPrefab: {fileID: 0}
   flavor: {fileID: 0}
-  chamberSize: 0
-  liveSlug: {fileID: 0}
+  chamberSize: 1
+  liveSlug: {fileID: 11400000, guid: 0c3a9e12988344746af6c366e0bb2c70, type: 2}
+  instantLoad: 1
   clipSize: 0
+  fireRate: 1
   slugVariants:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 0c3a9e12988344746af6c366e0bb2c70, type: 2}
+  - {fileID: 11400000, guid: b198bca6e06c9cb4c95af9ccd139378b, type: 2}

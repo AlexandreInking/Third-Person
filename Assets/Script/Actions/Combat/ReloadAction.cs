@@ -20,7 +20,9 @@ public class ReloadAction : Action
             {
                 case GameConstants.AE_Reload:
 
-                    Reload();
+                    RangedAdapter adapter = inventory.ActiveEntry.Value.Adapter as RangedAdapter;
+
+                    adapter.Reload();
 
                     TriggerActionCompleted(this);
 
@@ -39,7 +41,7 @@ public class ReloadAction : Action
 
         RangedAdapter adapter = inventory.ActiveEntry.Value.Adapter as RangedAdapter;
 
-        if (adapter.clipCount == weapon.liveBarrel.clipSize)
+        if (adapter.clipCount + adapter.chamberCount >= weapon.liveBarrel.clipSize + weapon.liveBarrel.chamberSize)
         {
             //Full Clip
             Debug.LogError("Full Clip");
@@ -58,29 +60,5 @@ public class ReloadAction : Action
         TriggerActionInitiated(this);
 
         animator.SetTrigger(GameConstants.reloadHash);
-    }
-
-    public void Reload()
-    {
-        RangedWeapon weapon = inventory.ActiveEntry.Value.Item as RangedWeapon;
-
-        RangedAdapter adapter = inventory.ActiveEntry.Value.Adapter as RangedAdapter;
-
-        //Remaining Clip Slots
-        int open = weapon.liveBarrel.clipSize - adapter.clipCount;
-
-        if (inventory.GetMagazine(weapon.liveBarrel.liveSlug).count > open)
-        {
-            adapter.clipCount = weapon.liveBarrel.clipSize;
-
-            inventory.UnLoadMagazine(weapon.liveBarrel.liveSlug, open);
-        }
-
-        else
-        {
-            adapter.clipCount += inventory.GetMagazine(weapon.liveBarrel.liveSlug).count;
-
-            inventory.ClearMagazine(weapon.liveBarrel.liveSlug);
-        }
     }
 }

@@ -13,6 +13,10 @@ public abstract class Barrel : Item
     public Slug liveSlug;
 
     [Space]
+    [Tooltip("Single Chamber Load Example For Shotguns > 1, CANNOT Exceed Chamber Size")]
+    public int instantLoad;
+
+    [Space]
     [Header("Rounds")]
     [Tooltip("Amount of Rounds A Single Clip Can Hold")]
     public int clipSize;

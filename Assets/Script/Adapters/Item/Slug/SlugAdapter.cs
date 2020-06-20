@@ -2,6 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class SlugAdapter : UnEqiuppableItemAdapter
+public abstract class SlugAdapter : UnGrabbableAdapter
 {
 }

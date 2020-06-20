@@ -16,13 +16,13 @@ public class SlugChangeAction : Action
     {
         TriggerActionInitiated(this);
 
-        int clipCount = (inventory.ActiveEntry.Value.Adapter as RangedAdapter).clipCount;
+        RangedAdapter adapter = inventory.ActiveEntry.Value.Adapter as RangedAdapter;
 
-        (inventory.ActiveEntry.Value.Adapter as RangedAdapter).clipCount = 0;
+        adapter.ClearChamber();
+
+        adapter.ClearClip();
 
         RangedWeapon weapon = inventory.ActiveEntry.Value.Item as RangedWeapon;
-
-        inventory.LoadMagazine(weapon.liveBarrel.liveSlug, clipCount);
 
         weapon.liveBarrel.liveSlug = (weapon.liveBarrel as PolyBarrel).NextVariant();
 

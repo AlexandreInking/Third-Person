@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProjectileAdapter : UnEqiuppableItemAdapter
+public class ProjectileAdapter : UnGrabbableAdapter
 {
-
-
     #region Impact
 
     public delegate void Impact(Collision collision);

@@ -143,7 +143,17 @@ public class Inventory : ScriptableObject
     {
         KeyValuePair<Slot, Item> magazine = GetMagazineEntry(slug);
 
-        (Library[magazine.Key] as Magazine).count -= rounds;
+        if (rounds >= (magazine.Value as Magazine).count)
+        {
+            (Library[magazine.Key] as Magazine).count = 0;
+
+            Debug.LogError("Can't Unload AnyMore ; Magazine Empty");
+        }
+
+        else
+        {
+            (Library[magazine.Key] as Magazine).count -= rounds;
+        }
     }
 
     /// <summary>

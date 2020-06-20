@@ -8,20 +8,30 @@ public class RangedWeapon : Weapon
     [Tooltip("Current Weapon Barrel")]
     public Barrel liveBarrel;
 
+    Volume volume;
+    RangedAdapter adapter;
+
     public override void Attack(Character attacker)
     {
-        if (liveBarrel.liveSlug is Projectile)
+        volume = ((attacker.profile as CombatantProfile).inventory as PlayerInventory).ActiveEntry.Value;
+
+        adapter = volume.Adapter as RangedAdapter;
+
+        for (int i = 0; i < adapter.chamberCount; i++)
         {
-            FireProjectile(attacker);
+            if (liveBarrel.liveSlug is Projectile)
+            {
+                FireProjectile(attacker);
+            }
+
+            adapter.chamberCount--;
         }
+
+        adapter.InstantLoad();
     }
 
     void FireProjectile(Character shooter)
     {
-        Volume volume = ((shooter.profile as CombatantProfile).inventory as PlayerInventory).ActiveEntry.Value;
-
-        RangedAdapter adapter = volume.Adapter as RangedAdapter;
-
         Projectile projectile = liveBarrel.liveSlug as Projectile;
 
         Vector3 aimPosition = shooter.controllerPack.GetController<CombatController>().aimPosition;
@@ -32,7 +42,11 @@ public class RangedWeapon : Weapon
         GameObject slug = Instantiate(projectile.itemPrefab, adapter.muzzle.position,
             Quaternion.LookRotation(aimDirection));
 
-        slug.GetComponent<Adapter>().Actor = shooter;
+        UnGrabbableAdapter slugAdapter = slug.GetComponent<Adapter>() as UnGrabbableAdapter;
+
+        slugAdapter.Actor = shooter;
+
+        slugAdapter.Flavor = projectile.flavor;
 
         slug.GetComponent<Rigidbody>().velocity = aimDirection * projectile.range * projectile.speed;
     }

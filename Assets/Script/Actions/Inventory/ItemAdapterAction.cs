@@ -16,10 +16,10 @@ public class ItemAdapterAction : Action
             switch (eventTag)
             {
                 case GameConstants.AE_Equip:
-                    (inventory.ActiveEntry.Value.Adapter as EqiuppableItemAdapter).Equip();
+                    (inventory.ActiveEntry.Value.Adapter as GrabbableAdapter).Equip();
                     break;
                 case GameConstants.AE_UnEquip:
-                    (inventory.ActiveEntry.Value.Adapter as EqiuppableItemAdapter).UnEquip();
+                    (inventory.ActiveEntry.Value.Adapter as GrabbableAdapter).UnEquip();
                     break;
                 default:
                     break;

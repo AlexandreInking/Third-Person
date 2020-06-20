@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public abstract class EqiuppableItemAdapter : Adapter
+public abstract class GrabbableAdapter : Adapter
 {
     [Header("Equip | UnEquip")]
     [SerializeField] AnimationClip EquipClip;

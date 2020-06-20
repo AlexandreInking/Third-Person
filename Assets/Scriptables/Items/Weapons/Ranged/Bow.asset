@@ -16,9 +16,4 @@ MonoBehaviour:
     type: 3}
   flavor: {fileID: 11400000, guid: ad47498050d4a9e4e953745d077850dd, type: 2}
   attackMode: 1
-  fireRate: 1
-  clipSize: 1
-  liveSlug: {fileID: 11400000, guid: b198bca6e06c9cb4c95af9ccd139378b, type: 2}
-  slugVariants:
-  - {fileID: 11400000, guid: 0c3a9e12988344746af6c366e0bb2c70, type: 2}
-  - {fileID: 11400000, guid: b198bca6e06c9cb4c95af9ccd139378b, type: 2}
+  liveBarrel: {fileID: 11400000, guid: 4adba83b74b9fd741b99ecf846224206, type: 2}

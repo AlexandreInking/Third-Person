@@ -245,4 +245,22 @@ public class PlayerInventory : Inventory
 
         return keyPair;
     }
+
+    public void UnLoadActiveMagazine(int rounds)
+    {
+        UnLoadMagazine(
+            (ActiveEntry.Value.Item as RangedWeapon).liveBarrel.liveSlug, rounds);
+    }
+
+    public void LoadActiveMagazine(int rounds)
+    {
+        LoadMagazine(
+            (ActiveEntry.Value.Item as RangedWeapon).liveBarrel.liveSlug, rounds);
+    }
+
+    public Magazine GetActiveMagazine()
+    {
+        return GetMagazine((ActiveEntry.Value.Item as RangedWeapon).liveBarrel.liveSlug);
+    }
+
 }

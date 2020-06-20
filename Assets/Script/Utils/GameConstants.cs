@@ -39,6 +39,7 @@ public class GameConstants
     public const string AE_Equip = "Equip";
     public const string AE_UnEquip = "UnEquip";
     public const string AE_Nock = "Nock";
+    public const string AE_Draw = "Draw";
     public const string AE_Fire = "Fire";
     public const string AE_Reload = "Reload";
     public const string AE_Aimed = "Aimed";

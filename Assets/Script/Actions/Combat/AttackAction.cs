@@ -36,9 +36,7 @@ public class AttackAction : Action
             {
                 case GameConstants.AE_Fire:
                     
-                    (inventory.ActiveEntry.Value.Adapter as RangedAdapter).clipCount--;
-
-                    RangedWeapon weapon = inventory.ActiveEntry.Value.Item as RangedWeapon;
+                    Weapon weapon = inventory.ActiveEntry.Value.Item as Weapon;
 
                     weapon.Attack(actor);
 
@@ -135,13 +133,20 @@ public class AttackAction : Action
         //Fire Rate Logic
         if (Time.time - shotFiredTime > weapon.liveBarrel.fireRate)
         {
-            if ((inventory.ActiveEntry.Value.Adapter as RangedAdapter).clipCount <= 0)
+            RangedAdapter adapter = inventory.ActiveEntry.Value.Adapter as RangedAdapter;
+
+            if (adapter.chamberCount <= 0)
             {
-                //Empty Clip
+                //Empty Chamber
 
-                actionPack.TakeAction<ReloadAction>();
+                adapter.InstantLoad();
 
-                return;
+                if (adapter.chamberCount <= 0)
+                {
+                    actionPack.TakeAction<ReloadAction>();
+
+                    return;
+                }
             }
 
             TriggerActionInitiated(this);

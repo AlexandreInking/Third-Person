@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class UnEqiuppableItemAdapter : Adapter
+public abstract class UnGrabbableAdapter : Adapter
 {
-    
+    public Flavor Flavor { get; set; }
 }
