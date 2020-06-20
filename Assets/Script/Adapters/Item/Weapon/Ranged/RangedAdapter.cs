@@ -77,7 +77,7 @@ public abstract class RangedAdapter : WeaponAdapter
 
         if (open <= 0)
         {
-            Debug.LogError("Clip Full");
+            Debug.Log("Clip Full");
 
             return;
         }
@@ -126,7 +126,7 @@ public abstract class RangedAdapter : WeaponAdapter
     {
         if (clipCount <= 0)
         {
-            Debug.LogError("Clip Empty");
+            Debug.Log("Clip Empty");
 
             return;
         }
@@ -210,7 +210,7 @@ public abstract class RangedAdapter : WeaponAdapter
     {
         if (chamberCount <= 0)
         {
-            Debug.LogError("Chamber Empty");
+            Debug.Log("Chamber Empty");
 
             return;
         }
@@ -285,5 +285,36 @@ public abstract class RangedAdapter : WeaponAdapter
                 clipCount -= open;
             }
         }
+    }
+
+    /// <summary>
+    /// Loads Chamber WithOut Considering Chamber Size and Instant Load
+    /// </summary>
+    /// <param name="rounds">RoundsTo Overload Chamber With</param>
+    public void OverLoad(int rounds)
+    {
+        Magazine magazine = inventory.GetActiveMagazine();
+
+        if (magazine.count >= rounds)
+        {
+            inventory.UnLoadActiveMagazine(rounds);
+
+            chamberCount += rounds;
+        }
+
+        else
+        {
+            inventory.UnLoadActiveMagazine(magazine.count);
+
+            chamberCount += magazine.count;
+        }
+    }
+
+    /// <summary>
+    /// OverLoads Chamber with Instant Load rounds
+    /// </summary>
+    public void InstantOverLoad()
+    {
+        OverLoad((inventory.ActiveEntry.Value.Item as RangedWeapon).liveBarrel.instantLoad);
     }
 }

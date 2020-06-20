@@ -23,9 +23,9 @@ public class RangedWeapon : Weapon
             {
                 FireProjectile(attacker);
             }
-
-            adapter.chamberCount--;
         }
+
+        adapter.chamberCount--;
 
         adapter.InstantLoad();
     }

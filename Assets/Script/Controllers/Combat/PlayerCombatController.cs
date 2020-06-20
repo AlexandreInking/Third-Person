@@ -56,10 +56,13 @@ public class PlayerCombatController : CombatController
         }
 
 
-        #region Attack Mode
+        
 
         if (inventoryController.Equipped is Weapon)
-        {
+        {   
+            
+            #region Attack Mode
+
             switch ((inventoryController.Equipped as Weapon).AttackMode)
             {
                 case AttackMode.CONTINIOUS:
@@ -82,9 +85,11 @@ public class PlayerCombatController : CombatController
                 default:
                     break;
             }
+
+            #endregion
         }
 
-        #endregion
+
 
         //Draw Target
         if (inventoryController.Equipped is RangedWeapon)

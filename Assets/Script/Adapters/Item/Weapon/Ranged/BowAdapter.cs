@@ -10,15 +10,9 @@ public class BowAdapter : RangedAdapter
     [Tooltip("Bow String Attach | Dettach")]
     [SerializeField] Transform nock;
 
-    GameObject dummyArrowInstance;
-
     Vector3 rootNockPosition;
 
     AnimationController animationController;
-
-    CombatController combatController;
-
-    CombatActionPack actionPack;
 
     #region Arrow Speed
 
@@ -35,29 +29,13 @@ public class BowAdapter : RangedAdapter
 
     #endregion
 
-    bool slugChange = false;
-
     public override void Initialize()
     {
         base.Initialize();
 
         rootNockPosition = nock.localPosition;
 
-        combatController = actor.controllerPack.GetController<CombatController>();
-
         animationController = actor.controllerPack.GetController<AnimationController>();
-
-        actionPack = combatController.actionPack as CombatActionPack;
-
-        inventory.OnQuickSlotEquipped += (entry => 
-        {
-            if (!isEquipped)
-            {
-                return;
-            }
-
-            (inventory.ActiveEntry.Value.Adapter as RangedAdapter).Reload();
-        });
 
         actor.OnAnimationEvent += (eventTag => 
         {
@@ -89,50 +67,82 @@ public class BowAdapter : RangedAdapter
             }
         });
 
-        actionPack.AddActionInitiatedListener<AimDownAction>(action => 
+
+
+        actor.OnActionInitiated += (action => 
         {
             if (!isEquipped)
             {
                 return;
             }
 
-            (inventory.ActiveEntry.Value.Adapter as RangedAdapter).ClearChamber();
+            if 
+            (
+            action is AimFreeAction
+            ||
+            action is ReloadAction
+            )
 
-            actionPack.TakeAction<ReloadAction>();
+            {
+                Dettach();
+            }
+
+            if (action is AimDownAction)
+            {
+                ClearChamber();
+
+                actor.controllerPack.GetController<CombatController>().actionPack.TakeAction<ReloadAction>();
+            }
         });
 
-        actionPack.AddActionInitiatedListener<AimFreeAction>(action => 
+        actor.OnActionCompleted += (action => 
         {
             if (!isEquipped)
             {
                 return;
             }
 
-            Dettach();
+            if (action is AttackAction)
+            {
+                CombatController controller = actor.controllerPack.GetController<CombatController>();
+
+                if (controller.aiming)
+                {
+                    controller.actionPack.TakeAction<ReloadAction>();
+                }
+
+                else
+                {
+                    Reload();
+                }
+            }
         });
 
-        actionPack.AddActionInitiatedListener<ReloadAction>(action => 
+        animationController.OnStateComplete += (state => 
         {
             if (!isEquipped)
             {
                 return;
             }
 
-            Dettach();
-        });
-
-        actionPack.AddActionInitiatedListener<SlugChangeAction>(action => 
-        {
-            if (!isEquipped)
+            switch (state)
             {
-                return;
+                case GameConstants.AS_Aiming:
+
+                    //Arrow Speed
+                    aimed = false;
+
+                    ((inventory.ActiveEntry.Value.Item as Bow).liveBarrel.liveSlug as Projectile).speed = 1;
+
+                    break;
+
+                default:
+
+                    break;
             }
-
-            slugChange = true;
-
         });
 
-        animationController.OnStateInitialized += (state =>
+        animationController.OnStateInitialized += (state => 
         {
             if (!isEquipped)
             {
@@ -143,11 +153,12 @@ public class BowAdapter : RangedAdapter
             {
                 case GameConstants.AS_Idle:
 
-                    Dettach();
+                    Reload();
 
                     break;
 
                 default:
+
                     break;
             }
         });
@@ -157,6 +168,8 @@ public class BowAdapter : RangedAdapter
     {
         if (isEquipped)
         {
+            #region Draw Speed Increase
+
             if (aimed && animationController.state[GameConstants.RangedLayer] == GameConstants.AS_Aiming)
             {
                 speedMultiplier += (Time.time - startTime) * Time.deltaTime;
@@ -166,8 +179,19 @@ public class BowAdapter : RangedAdapter
                     aimed = false;
                 }
 
-                ((inventory.ActiveEntry.Value.Item as Bow).liveBarrel.liveSlug as Projectile).speed =  (speedMultiplier / speedFator);
+                ((inventory.ActiveEntry.Value.Item as Bow).liveBarrel.liveSlug as Projectile).speed = (speedMultiplier / speedFator);
             }
+
+            #endregion
+
+            #region OverLoad
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                InstantOverLoad();
+            }
+
+            #endregion
         }
     }
 
@@ -189,50 +213,15 @@ public class BowAdapter : RangedAdapter
         nock.SetParent(transform);
 
         nock.localPosition = rootNockPosition;
-
-        //Arrow Speed
-        aimed = false;
-
-        ((inventory.ActiveEntry.Value.Item as Bow).liveBarrel.liveSlug as Projectile).speed = 1;
-
-        if (dummyArrowInstance != null)
-        {
-            Destroy(dummyArrowInstance);
-        }
     }
 
     protected override void Fire()
     {
         Dettach();
-
-        if (combatController.aiming)
-        {
-            actionPack.TakeAction<ReloadAction>();
-        }
-
-        else
-        {
-            (inventory.ActiveEntry.Value.Adapter as RangedAdapter).Reload();
-        }
     }
 
     protected override void Draw()
     {
-        Arrow arrow = (inventory.ActiveEntry.Value.Item as Bow).liveBarrel.liveSlug as Arrow;
-
-        if (slugChange)
-        {
-            slugChange = false;
-
-            if (combatController.aiming)
-            {
-                dummyArrowInstance = Instantiate(arrow.dummyPrefab, inventory.rightHand);
-            }
-        }
-
-        else
-        {
-            dummyArrowInstance = Instantiate(arrow.dummyPrefab, inventory.rightHand);
-        }
+        
     }
 }

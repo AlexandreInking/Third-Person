@@ -115,7 +115,7 @@ public class Inventory : ScriptableObject
 
         if (keyPair.Value == null)
         {
-            Debug.LogError($"Can't Find {slug.name} in Library");
+            Debug.Log($"Can't Find {slug.name} in Library");
         }
 
         return keyPair;
@@ -147,7 +147,7 @@ public class Inventory : ScriptableObject
         {
             (Library[magazine.Key] as Magazine).count = 0;
 
-            Debug.LogError("Can't Unload AnyMore ; Magazine Empty");
+            Debug.Log("Can't Unload AnyMore ; Magazine Empty");
         }
 
         else

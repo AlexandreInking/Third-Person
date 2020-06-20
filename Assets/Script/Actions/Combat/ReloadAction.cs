@@ -24,6 +24,8 @@ public class ReloadAction : Action
 
                     adapter.Reload();
 
+                    animator.ResetTrigger(GameConstants.reloadHash);
+
                     TriggerActionCompleted(this);
 
                     break;
@@ -44,7 +46,7 @@ public class ReloadAction : Action
         if (adapter.clipCount + adapter.chamberCount >= weapon.liveBarrel.clipSize + weapon.liveBarrel.chamberSize)
         {
             //Full Clip
-            Debug.LogError("Full Clip");
+            Debug.Log("Full Clip");
 
             return;
         }

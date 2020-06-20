@@ -40,6 +40,8 @@ public class AttackAction : Action
 
                     weapon.Attack(actor);
 
+                    TriggerActionCompleted(this);
+
                     break;
 
                 case GameConstants.AE_Aimed:
