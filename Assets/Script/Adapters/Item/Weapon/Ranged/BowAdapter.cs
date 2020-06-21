@@ -14,6 +14,8 @@ public class BowAdapter : RangedAdapter
 
     AnimationController animationController;
 
+    GameObject dummyArrowInstance;
+
     #region Arrow Speed
 
     float speedMultiplier = 1f;
@@ -66,8 +68,6 @@ public class BowAdapter : RangedAdapter
                     break;
             }
         });
-
-
 
         actor.OnActionInitiated += (action => 
         {
@@ -149,6 +149,8 @@ public class BowAdapter : RangedAdapter
                 return;
             }
 
+            Dettach();
+
             switch (state)
             {
                 case GameConstants.AS_Idle:
@@ -213,6 +215,9 @@ public class BowAdapter : RangedAdapter
         nock.SetParent(transform);
 
         nock.localPosition = rootNockPosition;
+
+        //Destroy Dummy Arrow Instance
+        Destroy(dummyArrowInstance);
     }
 
     protected override void Fire()
@@ -222,6 +227,8 @@ public class BowAdapter : RangedAdapter
 
     protected override void Draw()
     {
-        
+        Arrow arrow = (inventory.ActiveEntry.Value.Item as RangedWeapon).liveBarrel.liveSlug as Arrow;
+
+        dummyArrowInstance = Instantiate(arrow.dummyPrefab, inventory.rightHand);
     }
 }
