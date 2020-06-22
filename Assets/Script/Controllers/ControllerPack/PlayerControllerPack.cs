@@ -10,5 +10,7 @@
         InitializeController<PlayerCombatController>();
 
         InitializeController<PlayerInventoryController>();
+
+        InitializeController<CameraController>();
     }
 }

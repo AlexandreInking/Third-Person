@@ -161,7 +161,7 @@ public abstract class RangedAdapter : WeaponAdapter
 
         if (open <= 0)
         {
-            Debug.LogError("Chamber Full");
+            Debug.Log("Chamber Full");
 
             return;
         }

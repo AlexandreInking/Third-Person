@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProjectileAdapter : UnGrabbableAdapter
+public class ProjectileAdapter : SlugAdapter
 {
     #region Impact
 
@@ -18,13 +18,17 @@ public class ProjectileAdapter : UnGrabbableAdapter
     #endregion
 
     [SerializeField] protected Rigidbody rBody;
-    [Tooltip("Time Projectile will Destroy After")]
-    [SerializeField] float lifeTime;
+
+    float lifeTime;
 
     protected bool collided = false;
 
     public override void Initialize()
     {
+        lifeTime = (((actor.profile as CombatantProfile).inventory as PlayerInventory)
+            .ActiveEntry.Value.Item as RangedWeapon)
+            .liveBarrel.liveSlug.lifeTime;
+
         Destroy(gameObject, lifeTime);
 
         OnImpact += (collision =>

@@ -10,6 +10,11 @@ public class BowAdapter : RangedAdapter
     [Tooltip("Bow String Attach | Dettach")]
     [SerializeField] Transform nock;
 
+    [Space]
+    [Header("Path Visualization")]
+    [SerializeField] LineRenderer path;
+    [SerializeField] int pathSegment = 10;
+
     Vector3 rootNockPosition;
 
     AnimationController animationController;
@@ -24,10 +29,18 @@ public class BowAdapter : RangedAdapter
 
     bool aimed = false;
 
+    #endregion
+
+    #region OverLoad
+
+    bool overLoad = false;
+
+    int chamberCountBeforeOverload = 0;
+
     [Space]
-    [Tooltip("Controls By How Much Arrow Speed is Multiplied Proportional to Pull Back")]
-    [SerializeField] float speedFator = 2f;
-    [SerializeField] float speedThreshold = 3.5f;
+    [Header("OverLoad")]
+    [Tooltip("Maximum Rounds Allowed to be Loaded In OverLoad")]
+    [SerializeField] int overLoadThreshold = 3;
 
     #endregion
 
@@ -61,6 +74,10 @@ public class BowAdapter : RangedAdapter
                     speedMultiplier = 1f;
 
                     aimed = true;
+
+                    //Path Visualization
+
+                    path.enabled = true;
 
                     break;
 
@@ -116,6 +133,19 @@ public class BowAdapter : RangedAdapter
                     Reload();
                 }
             }
+
+            #region OverLoad
+
+            if (action is ReloadAction && overLoad)
+            {
+                chamberCount = chamberCountBeforeOverload;
+
+                InstantOverLoad();
+
+                overLoad = false;
+            }
+
+            #endregion
         });
 
         animationController.OnStateComplete += (state => 
@@ -130,9 +160,11 @@ public class BowAdapter : RangedAdapter
                 case GameConstants.AS_Aiming:
 
                     //Arrow Speed
+
                     aimed = false;
 
-                    ((inventory.ActiveEntry.Value.Item as Bow).liveBarrel.liveSlug as Projectile).speed = 1;
+                    ((inventory.ActiveEntry.Value.Item as Bow).liveBarrel.liveSlug as Projectile).speed = 
+                    ((inventory.ActiveEntry.Value.Item as Bow).liveBarrel.liveSlug as Arrow).defaultSpeed;
 
                     break;
 
@@ -149,11 +181,11 @@ public class BowAdapter : RangedAdapter
                 return;
             }
 
-            Dettach();
-
             switch (state)
             {
                 case GameConstants.AS_Idle:
+
+                    Dettach();
 
                     Reload();
 
@@ -166,34 +198,69 @@ public class BowAdapter : RangedAdapter
         });
     }
 
+    private void Start()
+    {
+        path.positionCount = pathSegment;
+    }
+
     private void Update()
     {
         if (isEquipped)
         {
-            #region Draw Speed Increase
-
-            if (aimed && animationController.state[GameConstants.RangedLayer] == GameConstants.AS_Aiming)
+            if (animationController.state[GameConstants.RangedLayer] == GameConstants.AS_Aiming)
             {
-                speedMultiplier += (Time.time - startTime) * Time.deltaTime;
 
-                if (speedMultiplier > speedThreshold)
+                #region OverLoad
+
+                if (Input.GetButtonDown(GameConstants.Use1))
                 {
-                    aimed = false;
+                    if (chamberCount >= overLoadThreshold)
+                    {
+                        Debug.LogError("OverLoad Limit Exceeded");
+                    }
+
+                    else
+                    {
+                        chamberCountBeforeOverload = chamberCount;
+
+                        //Force Reload
+                        actor.GetComponent<Animator>().SetTrigger(GameConstants.reloadHash);
+
+                        overLoad = true;
+                    }
                 }
 
-                ((inventory.ActiveEntry.Value.Item as Bow).liveBarrel.liveSlug as Projectile).speed = (speedMultiplier / speedFator);
+                #endregion
+
+                #region Arrow Draw Speed Increase
+
+                Arrow projectile = (inventory.ActiveEntry.Value.Item as Bow).liveBarrel.liveSlug as Arrow;
+
+                if (aimed)
+                {
+                    speedMultiplier += (Time.time - startTime) * Time.deltaTime;
+
+                    if (speedMultiplier > projectile.speedThreshold)
+                    {
+                        aimed = false;
+                    }
+
+                    projectile.speed = projectile.defaultSpeed + (speedMultiplier / projectile.speedFator);
+                }
+
+                #endregion
+
+                #region Path Visualization
+
+                Vector3 aimPosition = actor.controllerPack.GetController<CombatController>().aimPosition;
+
+                Vector3 vo = (aimPosition - muzzle.position).normalized * projectile.range * projectile.speed;
+
+                VisulaizePath(vo);
+
+                #endregion
+
             }
-
-            #endregion
-
-            #region OverLoad
-
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                InstantOverLoad();
-            }
-
-            #endregion
         }
     }
 
@@ -218,6 +285,10 @@ public class BowAdapter : RangedAdapter
 
         //Destroy Dummy Arrow Instance
         Destroy(dummyArrowInstance);
+
+        //Path Visualization
+
+        path.enabled = false;
     }
 
     protected override void Fire()
@@ -230,5 +301,38 @@ public class BowAdapter : RangedAdapter
         Arrow arrow = (inventory.ActiveEntry.Value.Item as RangedWeapon).liveBarrel.liveSlug as Arrow;
 
         dummyArrowInstance = Instantiate(arrow.dummyPrefab, inventory.rightHand);
+    }
+
+    /// <summary>
+    /// Calculate Position Of Projectile In Time
+    /// </summary>
+    /// <param name="vo">Initial Velocity</param>
+    /// <param name="time">Time Instant</param>
+    /// <returns></returns>
+    Vector3 PositionInTime(Vector3 vo, float time)
+    {
+        Vector3 vxz = vo;
+        vxz.y = 0f;
+
+        Vector3 result = muzzle.position + vo * time;
+        float sY = (-0.5f * Mathf.Abs(Physics.gravity.y) * (time * time)) + (vo.y * time) + muzzle.position.y;
+
+        result.y = sY;
+
+        return result;
+    }
+
+    /// <summary>
+    /// Visualize Line Renderer For Path
+    /// </summary>
+    /// <param name="vo">Initial Velocity</param>
+    void VisulaizePath(Vector3 vo)
+    {
+        for (int i = 0; i < pathSegment; i++)
+        {
+            Vector3 pos = PositionInTime(vo, i / (float) pathSegment);
+
+            path.SetPosition(i, pos);
+        }
     }
 }

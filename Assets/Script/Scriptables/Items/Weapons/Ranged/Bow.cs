@@ -5,8 +5,4 @@ using UnityEngine;
 [CreateAssetMenu(fileName = nameof(Bow), menuName = "SO/Weapons/Ranged/Bow")]
 public class Bow : RangedWeapon
 {
-    private void OnEnable()
-    {
-        (liveBarrel.liveSlug as Projectile).speed = 1f;
-    }
 }

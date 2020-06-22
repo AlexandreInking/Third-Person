@@ -15,7 +15,11 @@ MonoBehaviour:
   itemPrefab: {fileID: 1679377528447283793, guid: 228f606805b633a478db5eb207076f7d,
     type: 3}
   flavor: {fileID: 0}
+  lifeTime: 3
   range: 50
   speed: 1
   dummyPrefab: {fileID: 1679377528447283793, guid: a5fe6a79015a8b24482e697a46ba244b,
     type: 3}
+  defaultSpeed: 1
+  speedFator: 3
+  speedThreshold: 2

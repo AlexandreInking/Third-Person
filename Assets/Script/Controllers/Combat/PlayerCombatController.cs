@@ -34,33 +34,42 @@ public class PlayerCombatController : CombatController
 
     private void Update()
     {
-        if (inventoryController.Equipped is RangedWeapon)
+        if (inventoryController.Equipped is Weapon)
         {
-            actionPack.TakeAction<UpdateAimAction>();
+            #region Ranged
 
-            actionPack.TakeAction<ToggleAimAction>();
-
-            #region Slug Change
-
-            RangedWeapon weapon = inventoryController.Equipped as RangedWeapon;
-
-            if (weapon.liveBarrel is PolyBarrel)
+            if (inventoryController.Equipped is RangedWeapon)
             {
-                if (Input.GetButtonDown(GameConstants.Fire3))
+                actionPack.TakeAction<UpdateAimAction>();
+
+                actionPack.TakeAction<ToggleAimAction>();
+
+                #region Slug Change
+
+                RangedWeapon weapon = inventoryController.Equipped as RangedWeapon;
+
+                if (weapon.liveBarrel is PolyBarrel)
                 {
-                    actionPack.TakeAction<SlugChangeAction>();
+                    if (Input.GetButtonDown(GameConstants.Fire3))
+                    {
+                        actionPack.TakeAction<SlugChangeAction>();
+                    }
                 }
+
+                #endregion
+
+                #region Reload
+
+                if (Input.GetButtonDown(GameConstants.Reload))
+                {
+                    actionPack.TakeAction<ReloadAction>();
+                }
+
+                #endregion
             }
 
             #endregion
-        }
 
-
-        
-
-        if (inventoryController.Equipped is Weapon)
-        {   
-            
             #region Attack Mode
 
             switch ((inventoryController.Equipped as Weapon).AttackMode)
